@@ -49,67 +49,68 @@ export default function Layout({
 
       {/* Header */}
       {!hideHeader && (
-        <header className="sticky top-0 z-[100] border-b border-white/5 backdrop-blur-xl bg-vertus-black/80 overflow-hidden">
+        <header className="sticky top-0 z-[100] border-b border-white/5 backdrop-blur-xl bg-vertus-black/90 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-gold/5 via-transparent to-gold/5 opacity-50 pointer-events-none" />
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 sm:py-6 flex justify-between items-center relative z-10">
-          <div className="flex items-center gap-3 sm:gap-6">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3.5 sm:py-4 flex justify-between items-center relative z-10 min-w-0">
+          <div className="flex items-center gap-3 sm:gap-6 shrink-0">
             {onBack && (
               <button 
                 onClick={onBack}
-                className="p-2 sm:p-3 bg-white/5 border border-white/10 rounded-xl text-white/40 hover:text-gold hover:border-gold/30 transition-all group shrink-0"
+                className="p-2 sm:p-2.5 bg-white/5 border border-white/10 rounded-xl text-white/40 hover:text-gold hover:border-gold/30 transition-all group shrink-0"
               >
-                <ArrowLeft size={18} className="group-hover:-translate-x-1 transition-transform" />
+                <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
               </button>
             )}
-            <div className="flex items-center gap-2.5 sm:gap-4">
-              <span className="text-2xl sm:text-4xl font-black italic text-gold tracking-tighter leading-none shrink-0">VERTUS</span>
-              <div className="flex flex-col justify-center">
-                <h1 className="text-sm sm:text-2xl font-black tracking-tighter uppercase leading-none text-white">
+            <div className="flex items-center gap-2.5 sm:gap-4 shrink-0">
+              <span className="text-xl sm:text-3xl font-black italic text-gold tracking-tighter leading-none shrink-0">VERTUS</span>
+              <div className="flex flex-col justify-center shrink-0">
+                <div className="text-xs sm:text-lg font-black tracking-tighter uppercase leading-tight text-white whitespace-nowrap">
                   Raio-X <span className="text-gold">Financeiro</span>
-                </h1>
-                <p className="text-[8px] sm:text-[10px] font-black text-gold/40 uppercase tracking-[0.2em] sm:tracking-[0.3em] mt-0.5 sm:mt-1">
+                </div>
+                <p className="text-[8px] sm:text-[9px] font-black text-gold/50 uppercase tracking-[0.2em] mt-0.5 whitespace-nowrap">
                   Consultoria Estratégica
                 </p>
               </div>
             </div>
           </div>
-          <div className="flex items-center gap-2 sm:gap-3">
-            <nav className="hidden md:flex items-center gap-8 text-[10px] font-black uppercase tracking-[0.2em] text-white/40">
+
+          <div className="flex items-center gap-3 sm:gap-6 shrink-0">
+            <nav className="hidden lg:flex items-center gap-6 text-[10px] font-black uppercase tracking-[0.2em] text-white/50 shrink-0">
               <button 
                 onClick={onBpoClick} 
-                className="hover:text-gold transition-all hover:tracking-[0.3em] font-black bg-transparent border-none cursor-pointer uppercase py-1"
+                className="hover:text-gold transition-all font-black bg-transparent border-none cursor-pointer uppercase py-1 whitespace-nowrap"
               >
                 BPO Vertus
               </button>
               <button 
                 onClick={onVertusFinanceClick} 
-                className="hover:text-gold transition-all hover:tracking-[0.3em] font-black bg-transparent border-none cursor-pointer uppercase py-1"
+                className="hover:text-gold transition-all font-black bg-transparent border-none cursor-pointer uppercase py-1 whitespace-nowrap"
               >
                 Vertus Finance
               </button>
-              <div className="h-4 w-px bg-white/10" />
-              <span className="text-gold flex items-center gap-2">
-                <div className="w-1.5 h-1.5 bg-gold rounded-full animate-pulse" />
+              <div className="h-4 w-px bg-white/10 shrink-0" />
+              <span className="text-gold flex items-center gap-2 whitespace-nowrap">
+                <div className="w-1.5 h-1.5 bg-gold rounded-full animate-pulse shrink-0" />
                 Diagnóstico VERTUS
               </span>
             </nav>
 
-            <div className="flex items-center gap-2 relative z-10">
+            <div className="flex items-center gap-2 relative z-10 shrink-0">
               {isAdmin && onAdminClick && (
                 <button 
                   onClick={onAdminClick}
-                  className="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-4 py-1.5 sm:py-2 bg-gold/10 border border-gold/25 rounded-xl text-gold hover:bg-gold/20 transition-all group text-[9px] sm:text-[10px] font-black uppercase tracking-wider"
+                  className="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3.5 py-1.5 sm:py-2 bg-gold/10 border border-gold/25 rounded-xl text-gold hover:bg-gold/20 transition-all group text-[9px] sm:text-[10px] font-black uppercase tracking-wider whitespace-nowrap"
                 >
-                  <ShieldCheck size={14} className="group-hover:scale-110 transition-transform" />
+                  <ShieldCheck size={14} className="group-hover:scale-110 transition-transform shrink-0" />
                   <span className="hidden sm:inline">Painel Admin</span>
                 </button>
               )}
               {onLogout && (
                 <button 
                   onClick={onLogout}
-                  className="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-4 py-1.5 sm:py-2 bg-white/5 border border-white/10 rounded-xl text-white/40 hover:text-red-500 hover:border-red-500/30 transition-all group text-[9px] sm:text-[10px] font-black uppercase tracking-wider"
+                  className="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3.5 py-1.5 sm:py-2 bg-white/5 border border-white/10 rounded-xl text-white/40 hover:text-red-500 hover:border-red-500/30 transition-all group text-[9px] sm:text-[10px] font-black uppercase tracking-wider whitespace-nowrap"
                 >
-                  <LogOut size={14} className="group-hover:scale-110 transition-transform" />
+                  <LogOut size={14} className="group-hover:scale-110 transition-transform shrink-0" />
                   <span className="hidden sm:inline">Sair</span>
                 </button>
               )}
