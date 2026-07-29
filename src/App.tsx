@@ -457,22 +457,23 @@ export default function App() {
                 onNext={handleNextToTraining}
                 isTrainingComplete={isTrainingComplete}
               />
-              <div className="max-w-6xl mx-auto px-6 pb-12 space-y-12">
+              <div className="max-w-5xl mx-auto px-4 sm:px-6 pb-6 space-y-6">
                 <VertusAssistant 
                   inline 
                   isLocked={!isTrainingComplete} 
                   onNavigateToTraining={handleNextToTraining} 
                 />
-                <div className="flex justify-center pt-8">
+                <div className="flex justify-center pt-2">
                   <button 
                     onClick={() => setShowAbout(true)}
-                    className="group relative px-20 py-10 bg-gradient-to-br from-gold-light via-gold to-gold-dark rounded-[40px] text-vertus-black flex flex-col items-center justify-center gap-4 font-black uppercase tracking-[0.3em] text-lg shadow-[0_30px_60px_rgba(212,175,119,0.4)] hover:shadow-[0_30px_60px_rgba(212,175,119,0.6)] hover:scale-[1.05] transition-all overflow-hidden border-4 border-white/20"
+                    className="group relative px-8 py-4 sm:px-10 sm:py-4.5 bg-gradient-to-br from-gold-light via-gold to-gold-dark rounded-2xl text-vertus-black flex items-center justify-center gap-3 font-black uppercase tracking-wider text-xs sm:text-sm shadow-xl shadow-gold/20 hover:scale-[1.01] transition-all overflow-hidden border border-white/20"
                   >
-                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/50 to-transparent w-full h-full -skew-x-12 animate-shine pointer-events-none" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                    <Sparkles size={32} className="relative z-10 animate-pulse" />
-                    <span className="relative z-10 text-xl">Conheça a VERTUS</span>
-                    <div className="relative z-10 text-[10px] font-black tracking-[0.4em] opacity-60">Consultoria Estratégica de Elite</div>
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent w-full h-full -skew-x-12 animate-shine pointer-events-none" />
+                    <Sparkles size={18} className="relative z-10 shrink-0" />
+                    <div className="flex flex-col items-start text-left relative z-10">
+                      <span className="text-xs sm:text-sm font-black leading-tight">Conheça a VERTUS</span>
+                      <span className="text-[9px] font-black tracking-widest opacity-70">Consultoria Estratégica de Elite</span>
+                    </div>
                   </button>
                 </div>
               </div>

@@ -107,37 +107,37 @@ export default function VertusAssistant({ isLocked, onNavigateToTraining, inline
 
   const chatContent = (
     <div className={cn(
-      "bg-vertus-gray border border-white/10 rounded-[40px] shadow-2xl flex flex-col overflow-hidden",
-      inline ? "w-full h-[600px]" : "absolute bottom-20 right-0 w-[400px] h-[600px]"
+      "bg-vertus-gray border border-white/10 rounded-2xl shadow-xl flex flex-col overflow-hidden",
+      inline ? "w-full h-[420px] sm:h-[450px]" : "absolute bottom-20 right-0 w-[360px] h-[500px]"
     )}>
       {/* Header */}
-      <div className="p-8 border-b border-white/5 bg-gold/5 flex items-center justify-between">
-        <div className="flex items-center gap-4">
-          <div className="w-14 h-14 rounded-2xl bg-gold/10 flex items-center justify-center border border-gold/20 shadow-2xl shadow-gold/10">
-            <Sparkles className="text-gold" size={28} />
+      <div className="p-4 border-b border-white/5 bg-gold/5 flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-gold/10 flex items-center justify-center border border-gold/20 shadow-md shadow-gold/10 shrink-0">
+            <Sparkles className="text-gold" size={20} />
           </div>
           <div>
-            <h4 className="text-lg font-bold text-white uppercase tracking-tight">Mentora Vertus</h4>
-            <span className="text-[10px] text-gold font-black uppercase tracking-widest">IA Estratégica em Tempo Real</span>
+            <h4 className="text-sm sm:text-base font-bold text-white uppercase tracking-tight">Mentora Vertus</h4>
+            <span className="text-[9px] text-gold font-black uppercase tracking-widest block">IA Estratégica em Tempo Real</span>
           </div>
         </div>
         {!inline && (
-          <button onClick={() => setIsOpen(false)} className="p-2 bg-white/5 border border-white/10 rounded-xl text-white/40 hover:text-white transition-all">
-            <X size={20} />
+          <button onClick={() => setIsOpen(false)} className="p-1.5 bg-white/5 border border-white/10 rounded-lg text-white/40 hover:text-white transition-all">
+            <X size={16} />
           </button>
         )}
       </div>
 
       {/* Messages */}
-      <div ref={scrollRef} className="flex-1 overflow-y-auto p-8 space-y-8 scroll-smooth relative custom-scrollbar">
+      <div ref={scrollRef} className="flex-1 overflow-y-auto p-4 space-y-4 scroll-smooth relative custom-scrollbar">
         {isLocked && (
-          <div className="absolute inset-0 z-10 bg-vertus-black/80 backdrop-blur-md flex flex-col items-center justify-center p-12 text-center space-y-8">
-            <div className="w-20 h-20 bg-gold/10 rounded-3xl flex items-center justify-center border border-gold/20 shadow-2xl shadow-gold/10">
-              <Lock className="text-gold" size={40} />
+          <div className="absolute inset-0 z-10 bg-vertus-black/80 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center space-y-4">
+            <div className="w-14 h-14 bg-gold/10 rounded-2xl flex items-center justify-center border border-gold/20 shadow-xl shadow-gold/10">
+              <Lock className="text-gold" size={28} />
             </div>
-            <div className="space-y-4">
-              <h4 className="text-2xl font-bold text-white uppercase tracking-tight">Acesso <span className="text-gold">Bloqueado</span></h4>
-              <p className="text-white/40 text-sm leading-relaxed font-medium max-w-xs">
+            <div className="space-y-2">
+              <h4 className="text-lg font-bold text-white uppercase tracking-tight">Acesso <span className="text-gold">Bloqueado</span></h4>
+              <p className="text-white/50 text-xs leading-relaxed font-medium max-w-xs">
                 Sua Mentora Financeira Vertus será liberada assim que você concluir os 3 módulos de treinamento obrigatórios.
               </p>
             </div>
@@ -146,40 +146,40 @@ export default function VertusAssistant({ isLocked, onNavigateToTraining, inline
                 if (!inline) setIsOpen(false);
                 onNavigateToTraining?.();
               }}
-              className="px-10 py-4 bg-gradient-to-br from-gold to-gold-dark text-vertus-black font-black text-xs uppercase tracking-widest rounded-xl hover:scale-105 transition-all shadow-2xl shadow-gold/20"
+              className="px-6 py-2.5 bg-gradient-to-br from-gold to-gold-dark text-vertus-black font-black text-xs uppercase tracking-wider rounded-xl hover:scale-102 transition-all shadow-lg shadow-gold/20"
             >
               Ir para o Treinamento
             </button>
           </div>
         )}
         {messages.map((msg, i) => (
-          <div key={i} className={cn("flex gap-4", msg.role === "user" ? "flex-row-reverse" : "flex-row")}>
+          <div key={i} className={cn("flex gap-3", msg.role === "user" ? "flex-row-reverse" : "flex-row")}>
             <div className={cn(
-              "w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 border shadow-lg",
+              "w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 border shadow-md",
               msg.role === "user" ? "bg-white/5 border-white/10" : "bg-gold/10 border-gold/20"
             )}>
-              {msg.role === "user" ? <User size={18} className="text-white/40" /> : <Bot size={18} className="text-gold" />}
+              {msg.role === "user" ? <User size={14} className="text-white/40" /> : <Bot size={14} className="text-gold" />}
             </div>
             <div className={cn(
-              "max-w-[85%] p-6 rounded-[24px] text-sm leading-relaxed font-medium shadow-2xl",
+              "max-w-[85%] p-3.5 sm:p-4 rounded-2xl text-xs sm:text-sm leading-relaxed font-medium shadow-lg",
               msg.role === "user" ? "bg-white/5 text-white/80 rounded-tr-none border border-white/5" : "bg-gold/5 text-white/90 rounded-tl-none border border-gold/10"
             )}>
-              <div className="prose prose-invert prose-sm prose-gold max-w-none">
+              <div className="prose prose-invert prose-xs sm:prose-sm prose-gold max-w-none">
                 <ReactMarkdown>{msg.text}</ReactMarkdown>
               </div>
             </div>
           </div>
         ))}
         {isLoading && (
-          <div className="flex gap-4">
-            <div className="w-10 h-10 rounded-xl bg-gold/10 border border-gold/20 flex items-center justify-center animate-pulse">
-              <Bot size={18} className="text-gold" />
+          <div className="flex gap-3">
+            <div className="w-8 h-8 rounded-lg bg-gold/10 border border-gold/20 flex items-center justify-center animate-pulse">
+              <Bot size={14} className="text-gold" />
             </div>
-            <div className="bg-gold/5 border border-gold/10 p-6 rounded-[24px] rounded-tl-none">
-              <div className="flex gap-2">
-                <div className="w-2.5 h-2.5 bg-gold rounded-full animate-bounce" />
-                <div className="w-2.5 h-2.5 bg-gold rounded-full animate-bounce [animation-delay:0.2s]" />
-                <div className="w-2.5 h-2.5 bg-gold rounded-full animate-bounce [animation-delay:0.4s]" />
+            <div className="bg-gold/5 border border-gold/10 p-3.5 rounded-2xl rounded-tl-none">
+              <div className="flex gap-1.5">
+                <div className="w-2 h-2 bg-gold rounded-full animate-bounce" />
+                <div className="w-2 h-2 bg-gold rounded-full animate-bounce [animation-delay:0.2s]" />
+                <div className="w-2 h-2 bg-gold rounded-full animate-bounce [animation-delay:0.4s]" />
               </div>
             </div>
           </div>
@@ -187,7 +187,7 @@ export default function VertusAssistant({ isLocked, onNavigateToTraining, inline
       </div>
 
       {/* Input */}
-      <div className="p-8 border-t border-white/5 bg-vertus-black/50 backdrop-blur-md">
+      <div className="p-3.5 sm:p-4 border-t border-white/5 bg-vertus-black/50 backdrop-blur-md">
         <div className="relative">
           <input
             type="text"
@@ -195,14 +195,14 @@ export default function VertusAssistant({ isLocked, onNavigateToTraining, inline
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && handleSend()}
             placeholder="Tire sua dúvida financeira estratégica..."
-            className="w-full bg-vertus-black border border-white/10 rounded-2xl pl-8 pr-16 py-6 text-base text-white placeholder:text-white/20 focus:border-gold/50 focus:ring-4 focus:ring-gold/5 outline-none transition-all font-medium shadow-inner"
+            className="w-full bg-vertus-black border border-white/10 rounded-xl pl-4 pr-12 py-3 text-xs sm:text-sm text-white placeholder:text-white/20 focus:border-gold/50 focus:ring-2 focus:ring-gold/10 outline-none transition-all font-medium shadow-inner"
           />
           <button
             onClick={handleSend}
             disabled={!input.trim() || isLoading}
-            className="absolute right-3 top-1/2 -translate-y-1/2 p-4 bg-gradient-to-br from-gold to-gold-dark text-vertus-black rounded-xl hover:scale-[1.05] active:scale-95 transition-all disabled:opacity-50 disabled:hover:scale-100 shadow-2xl shadow-gold/20"
+            className="absolute right-2 top-1/2 -translate-y-1/2 p-2.5 bg-gradient-to-br from-gold to-gold-dark text-vertus-black rounded-lg hover:scale-102 active:scale-95 transition-all disabled:opacity-50 disabled:hover:scale-100 shadow-md shadow-gold/20"
           >
-            <Send size={24} />
+            <Send size={16} />
           </button>
         </div>
       </div>
