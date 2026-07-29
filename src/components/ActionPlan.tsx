@@ -127,7 +127,7 @@ export default function ActionPlan({ diagnosis, lead, isLocked, onNavigateToTrai
   const rec = getRecommendation();
 
   return (
-    <div className="max-w-6xl mx-auto px-6 py-12 space-y-12 relative">
+    <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6 sm:py-12 space-y-8 sm:space-y-12 relative">
       <div className="flex justify-between items-center">
         <button 
           onClick={onBackToDashboard}
@@ -138,22 +138,22 @@ export default function ActionPlan({ diagnosis, lead, isLocked, onNavigateToTrai
         </button>
       </div>
 
-      <div id="vertus-action-plan-content" className="space-y-12">
+      <div id="vertus-action-plan-content" className="space-y-8 sm:space-y-12">
         {isLocked && (
-        <div className="absolute inset-0 z-20 bg-vertus-black/80 backdrop-blur-md rounded-[40px] flex items-center justify-center p-10">
-          <div className="max-w-md w-full bg-vertus-gray border border-white/10 rounded-[40px] p-12 text-center space-y-8 shadow-2xl">
-            <div className="w-24 h-24 bg-gold/10 rounded-3xl flex items-center justify-center border border-gold/20 mx-auto shadow-2xl shadow-gold/10">
-              <Lock className="text-gold" size={48} />
+        <div className="absolute inset-0 z-20 bg-vertus-black/80 backdrop-blur-md rounded-2xl sm:rounded-[40px] flex items-center justify-center p-4 sm:p-10">
+          <div className="max-w-md w-full bg-vertus-gray border border-white/10 rounded-2xl sm:rounded-3xl lg:rounded-[40px] p-6 sm:p-10 lg:p-12 text-center space-y-6 sm:space-y-8 shadow-2xl">
+            <div className="w-16 h-16 sm:w-24 sm:h-24 bg-gold/10 rounded-2xl sm:rounded-3xl flex items-center justify-center border border-gold/20 mx-auto shadow-2xl shadow-gold/10">
+              <Lock className="text-gold" size={32} />
             </div>
-            <div className="space-y-4">
-              <h3 className="text-3xl font-bold text-white uppercase tracking-tight">Plano de Ação <span className="text-gold">Bloqueado</span></h3>
-              <p className="text-white/40 text-sm leading-relaxed font-medium">
+            <div className="space-y-3 sm:space-y-4">
+              <h3 className="text-xl sm:text-3xl font-bold text-white uppercase tracking-tight">Plano de Ação <span className="text-gold">Bloqueado</span></h3>
+              <p className="text-white/40 text-xs sm:text-sm leading-relaxed font-medium">
                 Para acessar seu Plano de Ação personalizado e as recomendações estratégicas, você precisa concluir o treinamento obrigatório primeiro.
               </p>
             </div>
             <button 
               onClick={onNavigateToTraining}
-              className="w-full py-6 bg-gradient-to-br from-gold to-gold-dark text-vertus-black font-black text-sm uppercase tracking-widest rounded-2xl hover:scale-[1.02] transition-all shadow-2xl shadow-gold/20"
+              className="w-full py-4 sm:py-6 bg-gradient-to-br from-gold to-gold-dark text-vertus-black font-black text-xs sm:text-sm uppercase tracking-widest rounded-2xl hover:scale-[1.02] transition-all shadow-2xl shadow-gold/20"
             >
               INICIAR TREINAMENTO AGORA
             </button>
@@ -162,12 +162,12 @@ export default function ActionPlan({ diagnosis, lead, isLocked, onNavigateToTrai
       )}
 
       {/* AI Assistant Section */}
-      <div className="grid lg:grid-cols-3 gap-10">
-        <div className="lg:col-span-2 space-y-12">
+      <div className="grid lg:grid-cols-3 gap-6 lg:gap-10">
+        <div className="lg:col-span-2 space-y-8 sm:space-y-12">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-vertus-gray border border-white/10 rounded-[40px] p-10 space-y-10 relative overflow-hidden"
+            className="bg-vertus-gray border border-white/10 rounded-2xl sm:rounded-3xl lg:rounded-[40px] p-5 sm:p-8 lg:p-10 space-y-6 sm:space-y-10 relative overflow-hidden"
           >
             <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-gold via-white/20 to-gold opacity-30" />
             

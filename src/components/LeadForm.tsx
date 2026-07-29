@@ -34,11 +34,11 @@ export default function LeadForm({ onSubmit }: LeadFormProps) {
   const labelClasses = "block text-[10px] font-black tracking-[0.2em] uppercase text-gold/60 mb-3 flex items-center gap-2";
 
   return (
-    <div className="max-w-2xl mx-auto px-6 py-20">
+    <div className="max-w-2xl mx-auto px-4 sm:px-6 py-8 sm:py-20">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-vertus-gray border border-white/10 rounded-[40px] p-12 shadow-2xl relative overflow-hidden"
+        className="bg-vertus-gray border border-white/10 rounded-2xl sm:rounded-3xl lg:rounded-[40px] p-6 sm:p-10 lg:p-12 shadow-2xl relative overflow-hidden"
       >
         <div className="text-center mb-12 space-y-4">
           <div className="inline-flex items-center gap-3 px-4 py-1.5 bg-gold/10 border border-gold/20 rounded-full text-gold text-[10px] font-black tracking-[0.2em] uppercase mb-2">

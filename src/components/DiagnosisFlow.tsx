@@ -152,25 +152,25 @@ export default function DiagnosisFlow({ leadId, onComplete, onProgress }: Diagno
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -10 }}
-          className="bg-vertus-gray border border-white/10 rounded-[40px] p-12 shadow-2xl relative overflow-hidden"
+          className="bg-vertus-gray border border-white/10 rounded-2xl sm:rounded-3xl lg:rounded-[40px] p-5 sm:p-8 lg:p-12 shadow-2xl relative overflow-hidden"
         >
-          <div className="space-y-10">
+          <div className="space-y-6 sm:space-y-10">
             <div className="space-y-4">
-              <h2 className="text-2xl md:text-3xl font-bold text-white leading-tight uppercase tracking-tight">
+              <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-white leading-tight uppercase tracking-tight">
                 {currentQuestion.text}
               </h2>
             </div>
 
-            <div className="grid gap-4">
+            <div className="grid gap-3 sm:gap-4">
               {currentQuestion.type === "select" && currentQuestion.options?.map((opt, i) => (
                 <button
                   key={i}
                   onClick={() => handleAnswer(opt.value)}
-                  className="group p-8 rounded-[24px] border border-white/5 bg-white/[0.02] text-left transition-all hover:border-gold/40 hover:bg-gold/5 flex justify-between items-center shadow-2xl shadow-transparent hover:shadow-gold/5"
+                  className="group p-4 sm:p-6 lg:p-8 rounded-xl sm:rounded-[24px] border border-white/5 bg-white/[0.02] text-left transition-all hover:border-gold/40 hover:bg-gold/5 flex justify-between items-center shadow-2xl shadow-transparent hover:shadow-gold/5 gap-3"
                 >
-                  <span className="text-lg font-medium text-white/60 group-hover:text-white transition-colors">{opt.label}</span>
-                  <div className="w-8 h-8 rounded-full border border-white/10 group-hover:border-gold group-hover:bg-gold/20 transition-all flex items-center justify-center">
-                    <div className="w-3 h-3 bg-gold rounded-full scale-0 group-hover:scale-100 transition-transform" />
+                  <span className="text-sm sm:text-lg font-medium text-white/60 group-hover:text-white transition-colors leading-snug">{opt.label}</span>
+                  <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-full border border-white/10 group-hover:border-gold group-hover:bg-gold/20 transition-all flex items-center justify-center shrink-0">
+                    <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 bg-gold rounded-full scale-0 group-hover:scale-100 transition-transform" />
                   </div>
                 </button>
               ))}
@@ -178,7 +178,7 @@ export default function DiagnosisFlow({ leadId, onComplete, onProgress }: Diagno
           </div>
 
           {/* Navigation */}
-          <div className="mt-10 flex items-center gap-6">
+          <div className="mt-6 sm:mt-10 flex items-center gap-6">
             <button
               onClick={prevStep}
               disabled={currentStep === 0}
@@ -196,25 +196,25 @@ export default function DiagnosisFlow({ leadId, onComplete, onProgress }: Diagno
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="absolute inset-0 bg-vertus-black/95 backdrop-blur-xl z-50 flex items-center justify-center p-10"
+                className="absolute inset-0 bg-vertus-black/95 backdrop-blur-xl z-50 flex items-center justify-center p-5 sm:p-10"
               >
-                <div className="max-w-md text-center space-y-8">
-                  <div className="w-16 h-16 bg-gold/10 rounded-full flex items-center justify-center border border-gold/20 mx-auto">
-                    <AlertTriangle className="text-gold" size={32} />
+                <div className="max-w-md text-center space-y-6 sm:space-y-8">
+                  <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gold/10 rounded-full flex items-center justify-center border border-gold/20 mx-auto">
+                    <AlertTriangle className="text-gold" size={28} />
                   </div>
-                  <div className="space-y-4">
+                  <div className="space-y-3 sm:space-y-4">
                     <h4 className="text-[10px] font-black tracking-[0.3em] uppercase text-gold">Insight Estratégico VERTUS</h4>
-                    <p className="text-xl font-bold text-white leading-relaxed uppercase tracking-tight">
+                    <p className="text-base sm:text-xl font-bold text-white leading-relaxed uppercase tracking-tight">
                       {currentBlock.insight}
                     </p>
                   </div>
             <button
               onClick={() => nextStep()}
-              className="group relative px-12 py-5 bg-gradient-to-br from-gold-light via-gold to-gold-dark text-vertus-black font-black rounded-2xl uppercase tracking-widest text-xs hover:scale-105 transition-all flex items-center gap-4 mx-auto shadow-2xl shadow-gold/20 overflow-hidden"
+              className="group relative w-full sm:w-auto px-8 sm:px-12 py-4 sm:py-5 bg-gradient-to-br from-gold-light via-gold to-gold-dark text-vertus-black font-black rounded-2xl uppercase tracking-widest text-xs hover:scale-105 transition-all flex items-center justify-center gap-3 sm:gap-4 mx-auto shadow-2xl shadow-gold/20 overflow-hidden"
             >
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent w-full h-full -skew-x-12 animate-shine pointer-events-none" />
               <span className="relative z-10">CONTINUAR DIAGNÓSTICO</span>
-              <ArrowRight size={20} className="relative z-10 group-hover:translate-x-2 transition-transform" />
+              <ArrowRight size={18} className="relative z-10 group-hover:translate-x-2 transition-transform shrink-0" />
             </button>
                 </div>
               </motion.div>
@@ -224,7 +224,7 @@ export default function DiagnosisFlow({ leadId, onComplete, onProgress }: Diagno
       </AnimatePresence>
 
       {/* UX Feedback */}
-      <div className="mt-12 flex justify-center gap-12 text-white/20 text-[10px] font-black tracking-[0.2em] uppercase">
+      <div className="mt-8 sm:mt-12 flex flex-wrap justify-center gap-4 sm:gap-12 text-white/20 text-[10px] font-black tracking-[0.2em] uppercase">
         <div className="flex items-center gap-3">
           <CheckCircle2 size={16} className="text-gold" />
           Autoridade VERTUS

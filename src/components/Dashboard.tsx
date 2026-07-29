@@ -76,18 +76,18 @@ export default function Dashboard({ diagnosis, lead, onNext, isTrainingComplete 
   const benchmarkPercent = Math.max(5, Math.min(95, Math.round(diagnosis.score * 0.8 + Math.random() * 10)));
 
   return (
-    <div className="max-w-6xl mx-auto px-6 py-12 space-y-10" ref={dashboardRef} id="vertus-dashboard-content">
+    <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6 sm:py-12 space-y-6 sm:space-y-10" ref={dashboardRef} id="vertus-dashboard-content">
       {/* Header Info */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-10">
-        <div className="space-y-4">
-          <div className="inline-flex items-center gap-3 px-4 py-1.5 bg-gold/10 border border-gold/20 rounded-full text-gold text-[10px] font-black tracking-[0.2em] uppercase mb-2">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 sm:gap-10">
+        <div className="space-y-3 sm:space-y-4">
+          <div className="inline-flex items-center gap-2.5 px-3.5 py-1.5 bg-gold/10 border border-gold/20 rounded-full text-gold text-[10px] font-black tracking-[0.2em] uppercase mb-1 sm:mb-2">
             <ShieldCheck size={14} />
             Diagnóstico Estratégico VERTUS
           </div>
-          <h2 className="text-5xl font-black text-white uppercase tracking-tight leading-none">
+          <h2 className="text-2xl sm:text-4xl lg:text-5xl font-black text-white uppercase tracking-tight leading-tight sm:leading-none break-words">
             {lead.companyName}
           </h2>
-          <p className="text-white/40 text-sm font-medium tracking-wide">
+          <p className="text-white/40 text-xs sm:text-sm font-medium tracking-wide">
             Responsável: {lead.responsibleName} • {lead.location}
           </p>
         </div>
@@ -99,11 +99,11 @@ export default function Dashboard({ diagnosis, lead, onNext, isTrainingComplete 
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="lg:col-span-1 bg-vertus-gray border border-white/10 rounded-[40px] p-10 flex flex-col items-center justify-center text-center space-y-8 relative overflow-hidden"
+          className="lg:col-span-1 bg-vertus-gray border border-white/10 rounded-2xl sm:rounded-3xl lg:rounded-[40px] p-5 sm:p-8 lg:p-10 flex flex-col items-center justify-center text-center space-y-6 sm:space-y-8 relative overflow-hidden"
         >
           <div className="absolute top-0 left-0 w-full h-0.5 bg-gradient-to-r from-gold to-transparent opacity-30" />
           
-          <div className="relative w-56 h-56 flex items-center justify-center">
+          <div className="relative w-44 h-44 sm:w-56 sm:h-56 flex items-center justify-center">
             <svg className="w-full h-full transform -rotate-90">
               <circle cx="112" cy="112" r="100" stroke="currentColor" strokeWidth="16" fill="transparent" className="text-white/5" />
               <motion.circle
@@ -121,8 +121,8 @@ export default function Dashboard({ diagnosis, lead, onNext, isTrainingComplete 
               />
             </svg>
             <div className="absolute flex flex-col items-center">
-              <span className="text-7xl font-black text-white">{diagnosis.score}</span>
-              <span className="text-[10px] font-black tracking-[0.3em] uppercase text-white/40">Índice VERTUS</span>
+              <span className="text-4xl sm:text-7xl font-black text-white">{diagnosis.score}</span>
+              <span className="text-[9px] font-black tracking-[0.3em] uppercase text-white/40">Índice VERTUS</span>
             </div>
           </div>
           
@@ -145,19 +145,19 @@ export default function Dashboard({ diagnosis, lead, onNext, isTrainingComplete 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="lg:col-span-2 bg-vertus-gray border border-white/10 rounded-[40px] p-10 relative overflow-hidden"
+          className="lg:col-span-2 bg-vertus-gray border border-white/10 rounded-2xl sm:rounded-3xl lg:rounded-[40px] p-5 sm:p-8 lg:p-10 relative overflow-hidden"
         >
           <div className="absolute top-0 left-0 w-full h-0.5 bg-gradient-to-r from-gold to-transparent opacity-30" />
           
-          <div className="flex justify-between items-center mb-8">
-            <h3 className="text-xl font-bold text-white uppercase tracking-tight">Radar de Maturidade</h3>
+          <div className="flex justify-between items-center mb-6 sm:mb-8">
+            <h3 className="text-lg sm:text-xl font-bold text-white uppercase tracking-tight">Radar de Maturidade</h3>
             <div className="flex items-center gap-2 text-[9px] font-black text-white/40 uppercase tracking-widest">
               <div className="w-2 h-2 bg-gold rounded-full" />
               Sua Empresa
             </div>
           </div>
           
-          <div className="h-[350px] w-full">
+          <div className="h-[280px] sm:h-[350px] w-full">
             <ResponsiveContainer width="100%" height="100%">
               <RadarChart cx="50%" cy="50%" outerRadius="80%" data={radarData}>
                 <PolarGrid stroke="rgba(255,255,255,0.05)" />
@@ -185,19 +185,19 @@ export default function Dashboard({ diagnosis, lead, onNext, isTrainingComplete 
         <motion.div
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
-          className="bg-vertus-gray border border-white/10 rounded-[40px] p-10 space-y-6"
+          className="bg-vertus-gray border border-white/10 rounded-2xl sm:rounded-3xl lg:rounded-[40px] p-5 sm:p-8 lg:p-10 space-y-6"
         >
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-red-500/10 rounded-xl flex items-center justify-center border border-red-500/20">
+            <div className="w-10 h-10 bg-red-500/10 rounded-xl flex items-center justify-center border border-red-500/20 shrink-0">
               <AlertCircle className="text-red-500" size={20} />
             </div>
-            <h3 className="text-xl font-bold text-white uppercase tracking-tight">Hemorragia Mensal Estimada</h3>
+            <h3 className="text-lg sm:text-xl font-bold text-white uppercase tracking-tight">Hemorragia Mensal Estimada</h3>
           </div>
           <div className="space-y-2">
-            <p className="text-4xl font-bold text-red-500">
+            <p className="text-2xl sm:text-4xl font-bold text-red-500 break-words">
               R$ {diagnosis.monthlyLoss?.toLocaleString("pt-BR")},00
             </p>
-            <p className="text-white/40 text-sm leading-relaxed">
+            <p className="text-white/40 text-xs sm:text-sm leading-relaxed">
               Este é o valor aproximado que sua empresa deixa de lucrar todos os meses devido às ineficiências detectadas no diagnóstico.
             </p>
           </div>
@@ -212,7 +212,7 @@ export default function Dashboard({ diagnosis, lead, onNext, isTrainingComplete 
         <motion.div
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
-          className="bg-vertus-gray border border-white/10 rounded-[40px] p-10 flex flex-col h-[400px]"
+          className="bg-vertus-gray border border-white/10 rounded-2xl sm:rounded-3xl lg:rounded-[40px] p-5 sm:p-8 lg:p-10 flex flex-col min-h-[350px] sm:h-[400px]"
         >
           <div className="flex items-center gap-3 mb-6">
             <div className="w-10 h-10 bg-gold/10 rounded-xl flex items-center justify-center border border-gold/20">
