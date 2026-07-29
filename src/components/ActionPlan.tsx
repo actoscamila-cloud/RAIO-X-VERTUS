@@ -127,33 +127,33 @@ export default function ActionPlan({ diagnosis, lead, isLocked, onNavigateToTrai
   const rec = getRecommendation();
 
   return (
-    <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6 sm:py-12 space-y-8 sm:space-y-12 relative">
+    <div className="max-w-5xl mx-auto px-4 sm:px-6 py-4 sm:py-8 space-y-6 relative">
       <div className="flex justify-between items-center">
         <button 
           onClick={onBackToDashboard}
-          className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-white/40 hover:text-gold transition-colors group"
+          className="flex items-center gap-2 text-[9px] font-black uppercase tracking-widest text-white/40 hover:text-gold transition-colors group"
         >
-          <ArrowRight size={14} className="rotate-180 group-hover:-translate-x-1 transition-transform" />
+          <ArrowRight size={13} className="rotate-180 group-hover:-translate-x-1 transition-transform" />
           Voltar para o Dashboard
         </button>
       </div>
 
-      <div id="vertus-action-plan-content" className="space-y-8 sm:space-y-12">
+      <div id="vertus-action-plan-content" className="space-y-6">
         {isLocked && (
-        <div className="absolute inset-0 z-20 bg-vertus-black/80 backdrop-blur-md rounded-2xl sm:rounded-[40px] flex items-center justify-center p-4 sm:p-10">
-          <div className="max-w-md w-full bg-vertus-gray border border-white/10 rounded-2xl sm:rounded-3xl lg:rounded-[40px] p-6 sm:p-10 lg:p-12 text-center space-y-6 sm:space-y-8 shadow-2xl">
-            <div className="w-16 h-16 sm:w-24 sm:h-24 bg-gold/10 rounded-2xl sm:rounded-3xl flex items-center justify-center border border-gold/20 mx-auto shadow-2xl shadow-gold/10">
-              <Lock className="text-gold" size={32} />
+        <div className="absolute inset-0 z-20 bg-vertus-black/80 backdrop-blur-md rounded-2xl flex items-center justify-center p-4 sm:p-6">
+          <div className="max-w-md w-full bg-vertus-gray border border-white/10 rounded-2xl p-5 sm:p-8 text-center space-y-5 shadow-2xl">
+            <div className="w-14 h-14 bg-gold/10 rounded-2xl flex items-center justify-center border border-gold/20 mx-auto shadow-xl shadow-gold/10">
+              <Lock className="text-gold" size={26} />
             </div>
-            <div className="space-y-3 sm:space-y-4">
-              <h3 className="text-xl sm:text-3xl font-bold text-white uppercase tracking-tight">Plano de Ação <span className="text-gold">Bloqueado</span></h3>
-              <p className="text-white/40 text-xs sm:text-sm leading-relaxed font-medium">
+            <div className="space-y-2">
+              <h3 className="text-lg sm:text-2xl font-bold text-white uppercase tracking-tight">Plano de Ação <span className="text-gold">Bloqueado</span></h3>
+              <p className="text-white/50 text-xs leading-relaxed font-medium">
                 Para acessar seu Plano de Ação personalizado e as recomendações estratégicas, você precisa concluir o treinamento obrigatório primeiro.
               </p>
             </div>
             <button 
               onClick={onNavigateToTraining}
-              className="w-full py-4 sm:py-6 bg-gradient-to-br from-gold to-gold-dark text-vertus-black font-black text-xs sm:text-sm uppercase tracking-widest rounded-2xl hover:scale-[1.02] transition-all shadow-2xl shadow-gold/20"
+              className="w-full py-3 sm:py-4 bg-gradient-to-br from-gold to-gold-dark text-vertus-black font-black text-xs uppercase tracking-wider rounded-xl hover:scale-[1.01] transition-all shadow-xl shadow-gold/20"
             >
               INICIAR TREINAMENTO AGORA
             </button>
@@ -162,39 +162,35 @@ export default function ActionPlan({ diagnosis, lead, isLocked, onNavigateToTrai
       )}
 
       {/* AI Assistant Section */}
-      <div className="grid lg:grid-cols-3 gap-6 lg:gap-10">
-        <div className="lg:col-span-2 space-y-8 sm:space-y-12">
+      <div className="grid lg:grid-cols-3 gap-5">
+        <div className="lg:col-span-2 space-y-6">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-vertus-gray border border-white/10 rounded-2xl sm:rounded-3xl lg:rounded-[40px] p-5 sm:p-8 lg:p-10 space-y-6 sm:space-y-10 relative overflow-hidden"
+            className="bg-vertus-gray border border-white/10 rounded-2xl p-4 sm:p-6 space-y-6 relative overflow-hidden shadow-xl"
           >
-            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-gold via-white/20 to-gold opacity-30" />
+            <div className="absolute top-0 left-0 w-full h-0.5 bg-gradient-to-r from-gold via-white/20 to-gold opacity-30" />
             
-            <div className="flex items-center gap-4 border-b border-white/5 pb-8">
-              <div className="w-12 h-12 bg-gold/10 rounded-xl flex items-center justify-center border border-gold/20">
-                <Sparkles className="text-gold" size={24} />
+            <div className="flex items-center gap-3 border-b border-white/5 pb-4">
+              <div className="w-10 h-10 bg-gold/10 rounded-xl flex items-center justify-center border border-gold/20 shrink-0">
+                <Sparkles className="text-gold" size={20} />
               </div>
               <div>
-                <h3 className="text-xl font-bold text-white uppercase tracking-tight">Análise Estratégica VERTUS</h3>
-                <p className="text-gold text-[10px] font-black uppercase tracking-widest mt-1">Inteligência Artificial em Tempo Real</p>
+                <h3 className="text-base sm:text-lg font-bold text-white uppercase tracking-tight">Análise Estratégica VERTUS</h3>
+                <p className="text-gold text-[9px] font-black uppercase tracking-widest mt-0.5">Inteligência Artificial em Tempo Real</p>
               </div>
             </div>
 
-            <div className="flex-1 overflow-y-auto pr-4 max-h-[450px] custom-scrollbar">
+            <div className="flex-1 overflow-y-auto pr-3 max-h-[350px] custom-scrollbar">
               <div className="prose prose-invert prose-sm max-w-none">
                 {isGenerating ? (
-                  <div className="space-y-6 animate-pulse">
-                    <div className="h-4 w-full bg-white/5 rounded-full" />
-                    <div className="h-4 w-[90%] bg-white/5 rounded-full" />
-                    <div className="h-4 w-[95%] bg-white/5 rounded-full" />
-                    <div className="pt-6 space-y-3">
-                      <div className="h-4 w-32 bg-white/5 rounded-full" />
-                      <div className="h-4 w-full bg-white/5 rounded-full" />
-                    </div>
+                  <div className="space-y-4 animate-pulse">
+                    <div className="h-3.5 w-full bg-white/5 rounded-full" />
+                    <div className="h-3.5 w-[90%] bg-white/5 rounded-full" />
+                    <div className="h-3.5 w-[95%] bg-white/5 rounded-full" />
                   </div>
                 ) : (
-                  <div className="text-white/60 leading-relaxed space-y-4 font-medium">
+                  <div className="text-white/70 leading-relaxed space-y-3 font-medium text-xs sm:text-sm">
                     <ReactMarkdown>{aiAnalysis}</ReactMarkdown>
                   </div>
                 )}
@@ -203,30 +199,30 @@ export default function ActionPlan({ diagnosis, lead, isLocked, onNavigateToTrai
           </motion.div>
 
           {/* 30 Day Plan Visualizer */}
-          <div className="space-y-8">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-white/5 rounded-xl flex items-center justify-center border border-white/10">
-                <Calendar className="text-gold" size={20} />
+          <div className="space-y-4">
+            <div className="flex items-center gap-2.5">
+              <div className="w-8 h-8 bg-white/5 rounded-lg flex items-center justify-center border border-white/10">
+                <Calendar className="text-gold" size={16} />
               </div>
-              <h3 className="text-2xl font-bold text-white uppercase tracking-tight">Plano de Ação: 30 Dias</h3>
+              <h3 className="text-lg sm:text-xl font-bold text-white uppercase tracking-tight">Plano de Ação: 30 Dias</h3>
             </div>
 
-            <div className="grid md:grid-cols-2 gap-6">
+            <div className="grid md:grid-cols-2 gap-4">
               {ACTION_MOVEMENTS.map((step, i) => (
                 <motion.div
                   key={i}
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.2 + (i * 0.1) }}
+                  transition={{ delay: 0.1 + (i * 0.05) }}
                   onClick={() => setSelectedMovement(step)}
-                  className="bg-vertus-gray border border-white/10 rounded-[32px] p-8 space-y-4 hover:border-gold/30 transition-all group cursor-pointer"
+                  className="bg-vertus-gray border border-white/10 rounded-2xl p-5 space-y-3 hover:border-gold/30 transition-all group cursor-pointer shadow-lg"
                 >
                   <div className="flex justify-between items-center">
-                    <span className="text-[10px] font-black uppercase tracking-widest text-gold">{step.id}</span>
-                    <CheckCircle2 className="text-white/10 group-hover:text-gold transition-colors" size={16} />
+                    <span className="text-[9px] font-black uppercase tracking-widest text-gold">{step.id}</span>
+                    <CheckCircle2 className="text-white/20 group-hover:text-gold transition-colors" size={15} />
                   </div>
-                  <h4 className="text-lg font-bold text-white uppercase tracking-tight">{step.title}</h4>
-                  <p className="text-xs text-white/40 leading-relaxed">{step.description}</p>
+                  <h4 className="text-sm font-bold text-white uppercase tracking-tight">{step.title}</h4>
+                  <p className="text-xs text-white/50 leading-relaxed">{step.description}</p>
                 </motion.div>
               ))}
             </div>
@@ -234,35 +230,35 @@ export default function ActionPlan({ diagnosis, lead, isLocked, onNavigateToTrai
         </div>
 
         {/* Sidebar: Recommendations & Urgency */}
-        <div className="space-y-8">
+        <div className="space-y-5">
           {/* Main Recommendation */}
           <motion.div
-            initial={{ opacity: 0, x: 20 }}
+            initial={{ opacity: 0, x: 15 }}
             animate={{ opacity: 1, x: 0 }}
             className={cn(
-              "rounded-[40px] p-10 space-y-8 relative overflow-hidden",
+              "rounded-2xl p-5 sm:p-7 space-y-5 relative overflow-hidden shadow-xl",
               rec.highlight 
-                ? "bg-gradient-to-br from-gold to-gold-dark text-vertus-black shadow-2xl shadow-gold/20" 
+                ? "bg-gradient-to-br from-gold to-gold-dark text-vertus-black" 
                 : "bg-vertus-gray border border-white/10 text-white"
             )}
           >
             <div className="flex justify-between items-start">
-              <div className={cn("w-12 h-12 rounded-xl flex items-center justify-center border", rec.highlight ? "bg-vertus-black/10 border-vertus-black/10" : "bg-gold/10 border-gold/20")}>
-                <TrendingUp size={24} className={rec.highlight ? "text-vertus-black" : "text-gold"} />
+              <div className={cn("w-10 h-10 rounded-xl flex items-center justify-center border shrink-0", rec.highlight ? "bg-vertus-black/10 border-vertus-black/10" : "bg-gold/10 border-gold/20")}>
+                <TrendingUp size={20} className={rec.highlight ? "text-vertus-black" : "text-gold"} />
               </div>
-              <div className={cn("px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest", rec.highlight ? "bg-vertus-black/10" : "bg-white/10")}>
+              <div className={cn("px-2.5 py-0.5 rounded-full text-[8px] font-black uppercase tracking-widest", rec.highlight ? "bg-vertus-black/10" : "bg-white/10")}>
                 OFERTA EXCLUSIVA • BPO VERTUS
               </div>
             </div>
 
-            <div className="space-y-3">
-              <h3 className="text-3xl font-bold uppercase leading-none tracking-tight">{rec.title}</h3>
-              <p className={cn("text-sm font-medium leading-relaxed whitespace-pre-line", rec.highlight ? "opacity-80" : "text-white/60")}>
+            <div className="space-y-2">
+              <h3 className="text-xl sm:text-2xl font-bold uppercase leading-snug tracking-tight">{rec.title}</h3>
+              <p className={cn("text-xs font-medium leading-relaxed whitespace-pre-line", rec.highlight ? "opacity-90" : "text-white/60")}>
                 {rec.desc}
               </p>
             </div>
 
-            <div className="space-y-4 pt-4">
+            <div className="space-y-3 pt-2">
               <button 
                 onClick={() => {
                   const company = lead?.companyName ? `da ${lead.companyName}` : "da minha empresa";
@@ -271,23 +267,23 @@ export default function ActionPlan({ diagnosis, lead, isLocked, onNavigateToTrai
                   window.open(`${VERTUS_WHATSAPP_LINK}?text=${text}`, "_blank");
                 }}
                 className={cn(
-                "group relative w-full py-5 rounded-2xl font-black text-sm uppercase tracking-widest transition-all hover:scale-[1.02] flex items-center justify-center gap-3 overflow-hidden",
+                "group relative w-full py-3.5 rounded-xl font-black text-xs sm:text-sm uppercase tracking-wider transition-all hover:scale-[1.01] flex items-center justify-center gap-2.5 overflow-hidden shadow-lg",
                 rec.highlight ? "bg-vertus-black text-white" : "bg-gradient-to-br from-gold-light via-gold to-gold-dark text-vertus-black"
               )}>
                 {!rec.highlight && <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent w-full h-full -skew-x-12 animate-shine pointer-events-none" />}
                 <span className="relative z-10">{rec.btn}</span>
-                <ArrowRight size={20} className="relative z-10" />
+                <ArrowRight size={16} className="relative z-10" />
               </button>
-              <p className={cn("text-[9px] font-black uppercase tracking-widest text-center", rec.highlight ? "opacity-60" : "text-white/40")}>
+              <p className={cn("text-[8px] font-black uppercase tracking-widest text-center", rec.highlight ? "opacity-70" : "text-white/40")}>
                 Vagas limitadas para esta semana
               </p>
             </div>
           </motion.div>
 
           {/* Support Info */}
-          <div className="p-8 bg-gold/5 border border-gold/10 rounded-3xl space-y-4">
-            <h4 className="text-[10px] font-black text-gold uppercase tracking-widest">Suporte Estratégico</h4>
-            <p className="text-xs text-white/40 leading-relaxed">
+          <div className="p-5 bg-gold/5 border border-gold/10 rounded-2xl space-y-2">
+            <h4 className="text-[9px] font-black text-gold uppercase tracking-widest">Suporte Estratégico</h4>
+            <p className="text-xs text-white/50 leading-relaxed">
               Dúvidas sobre seu plano? Use o Assistente VERTUS em tempo real para clareza imediata sobre qualquer ponto do diagnóstico.
             </p>
           </div>
