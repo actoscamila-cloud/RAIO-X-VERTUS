@@ -116,28 +116,12 @@ export default function ActionPlan({ diagnosis, lead, isLocked, onNavigateToTrai
   };
 
   const getRecommendation = () => {
-    if (diagnosis.score <= 40) {
-      return {
-        title: "Controle 45 dias",
-        desc: "Implantação prática e acelerada para organizar seu financeiro do zero e sair do caos operacional.",
-        btn: "Conhecer o programa de 45 dias",
-        highlight: false
-      };
-    } else if (diagnosis.score <= 75) {
-      return {
-        title: "VERTUS FINANCE – Seu Sistema Financeiro Completo",
-        desc: "Gestão recorrente com indicadores em tempo real, fluxo de caixa projetado, precificação automática, DRE ao vivo e alertas que protegem seu caixa. Empresas que contratam Vertus Finance recuperam em média R$ 8.200/mês de margem perdida. Vagas limitadas esta semana.",
-        btn: "QUERO CLAREZA FINANCEIRA TOTAL AGORA",
-        highlight: true
-      };
-    } else {
-      return {
-        title: "BPO VERTUS – Operação e Controle de Elite",
-        desc: "A melhor solução para empresas que buscam focar 100% no core business. A VERTUS assume integralmente toda a rotina operacional do seu financeiro: contas a pagar, contas a receber, conciliação diária e fluxo de caixa.",
-        btn: "Conhecer o BPO VERTUS",
-        highlight: false
-      };
-    }
+    return {
+      title: "BPO VERTUS – Operação e Gestão Financeira de Elite",
+      desc: "A melhor solução para empresas que buscam focar 100% no seu core business. A VERTUS assume integralmente toda a rotina operacional do seu financeiro: contas a pagar, contas a receber, conciliação bancária diária e relatórios de fluxo de caixa atualizado.\n\nEmpresas que contratam o BPO VERTUS reduzem custos operacionais em até 30% e economizam em média 15 horas semanais da diretoria.",
+      btn: "QUERO BPO VERTUS AGORA",
+      highlight: true
+    };
   };
 
   const rec = getRecommendation();
@@ -216,18 +200,6 @@ export default function ActionPlan({ diagnosis, lead, isLocked, onNavigateToTrai
                 )}
               </div>
             </div>
-
-            <div className="pt-8 border-t border-white/5">
-              <button 
-                onClick={handleExport}
-                disabled={isExporting || isGenerating}
-                className="group relative w-full py-5 bg-gradient-to-br from-gold-light via-gold to-gold-dark rounded-2xl text-vertus-black flex items-center justify-center gap-3 font-black uppercase tracking-widest text-[10px] disabled:opacity-50 shadow-2xl shadow-gold/20 hover:shadow-gold/40 transition-all overflow-hidden"
-              >
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent w-full h-full -skew-x-12 animate-shine pointer-events-none" />
-                <Download size={16} className="relative z-10" />
-                <span className="relative z-10">{isExporting ? "Gerando PDF..." : "BAIXAR ANÁLISE ESTRATÉGICA (PDF)"}</span>
-              </button>
-            </div>
           </motion.div>
 
           {/* 30 Day Plan Visualizer */}
@@ -279,20 +251,25 @@ export default function ActionPlan({ diagnosis, lead, isLocked, onNavigateToTrai
                 <TrendingUp size={24} className={rec.highlight ? "text-vertus-black" : "text-gold"} />
               </div>
               <div className={cn("px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest", rec.highlight ? "bg-vertus-black/10" : "bg-white/10")}>
-                Recomendação
+                OFERTA EXCLUSIVA • BPO VERTUS
               </div>
             </div>
 
             <div className="space-y-3">
               <h3 className="text-3xl font-bold uppercase leading-none tracking-tight">{rec.title}</h3>
-              <p className={cn("text-sm font-medium leading-relaxed", rec.highlight ? "opacity-80" : "text-white/60")}>
+              <p className={cn("text-sm font-medium leading-relaxed whitespace-pre-line", rec.highlight ? "opacity-80" : "text-white/60")}>
                 {rec.desc}
               </p>
             </div>
 
             <div className="space-y-4 pt-4">
               <button 
-                onClick={() => window.open(VERTUS_WHATSAPP_LINK + "?text=Olá!%20Fiz%20o%20Raio-X%20Financeiro%20VERTUS%20e%20quero%20clareza%20total%20agora!", "_blank")}
+                onClick={() => {
+                  const company = lead?.companyName ? `da ${lead.companyName}` : "da minha empresa";
+                  const scoreInfo = diagnosis?.score !== undefined ? ` (Score: ${diagnosis.score}/100)` : "";
+                  const text = encodeURIComponent(`Olá! Sou ${lead?.responsibleName || ''} ${company}${scoreInfo}. Fiz o Raio-X Financeiro VERTUS e tenho interesse no BPO VERTUS!`);
+                  window.open(`${VERTUS_WHATSAPP_LINK}?text=${text}`, "_blank");
+                }}
                 className={cn(
                 "group relative w-full py-5 rounded-2xl font-black text-sm uppercase tracking-widest transition-all hover:scale-[1.02] flex items-center justify-center gap-3 overflow-hidden",
                 rec.highlight ? "bg-vertus-black text-white" : "bg-gradient-to-br from-gold-light via-gold to-gold-dark text-vertus-black"
