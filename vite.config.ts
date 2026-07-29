@@ -99,6 +99,20 @@ function parseColorToRgba(str: string): [number, number, number, number] | null 
     return [r, g, b, 1];
   }
 
+  if (str.startsWith('var(')) {
+    const varMatch = str.match(/var\(\s*([^,\s)]+)(?:\s*,\s*([^)]+))?\s*\)/);
+    if (varMatch) {
+      const varName = varMatch[1].trim();
+      if (COLOR_MAP[varName]) {
+        const [r, g, b] = COLOR_MAP[varName];
+        return [r, g, b, 1];
+      }
+      if (varMatch[2]) {
+        return parseColorToRgba(varMatch[2].trim());
+      }
+    }
+  }
+
   if (str.startsWith('#')) {
     const hex = str.slice(1);
     if (hex.length === 3) {
@@ -160,7 +174,7 @@ function resolveSingleColorMix(fullCall: string): string {
   }
 
   const innerMatch = fullCall.match(/color-mix\s*\(\s*in\s+[a-z]+\s*,\s*(.+)\s*\)/i);
-  if (!innerMatch) return 'rgba(212, 175, 119, 0.5)';
+  if (!innerMatch) return fullCall;
 
   let body = innerMatch[1].trim();
   if (body.endsWith(')')) {
@@ -168,7 +182,7 @@ function resolveSingleColorMix(fullCall: string): string {
   }
 
   const parts = splitTopLevelCommas(body);
-  if (parts.length < 2) return 'rgba(212, 175, 119, 0.5)';
+  if (parts.length < 2) return fullCall;
 
   let colorStr = '';
   let percent = 100;
@@ -194,7 +208,7 @@ function resolveSingleColorMix(fullCall: string): string {
 
   const rgba = parseColorToRgba(colorStr);
   if (!rgba) {
-    return 'rgba(212, 175, 119, 0.5)';
+    return fullCall;
   }
 
   const [r, g, b, baseAlpha] = rgba;

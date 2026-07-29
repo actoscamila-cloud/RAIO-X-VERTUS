@@ -9,8 +9,8 @@ interface LandingPageProps {
 
 export default function LandingPage({ onStart, onContinue }: LandingPageProps) {
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-8 sm:pt-16 lg:pt-24 pb-16 sm:pb-24 lg:pb-32">
-      <div className="grid lg:grid-cols-2 gap-10 lg:gap-24 items-center">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-12 sm:pt-16 lg:pt-24 pb-16 sm:pb-24 lg:pb-32">
+      <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
         {/* Left: Text Content */}
         <motion.div
           initial={{ opacity: 0, x: -50 }}
@@ -23,7 +23,7 @@ export default function LandingPage({ onStart, onContinue }: LandingPageProps) {
             Diagnóstico Estratégico VERTUS
           </div>
           
-          <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-black tracking-tight leading-[1.15] sm:leading-[1.1] text-white uppercase max-w-4xl break-words">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black tracking-tight leading-[1.15] text-white uppercase max-w-4xl break-words">
             Descubra o verdadeiro estado do seu <span className="text-transparent bg-clip-text bg-gradient-to-br from-gold via-gold-light to-gold-dark">financeiro</span> em menos de 5 minutos
           </h1>
           
@@ -31,10 +31,10 @@ export default function LandingPage({ onStart, onContinue }: LandingPageProps) {
             Análise estratégica + plano de otimização + recomendações automáticas personalizadas. A VERTUS transforma caos financeiro em clareza e previsibilidade para decisões seguras todos os dias.
           </p>
           
-          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 sm:gap-8 pt-4 sm:pt-6">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 sm:gap-6 pt-4 sm:pt-6">
             <button
               onClick={onStart}
-              className="group relative w-full sm:w-auto px-8 sm:px-12 py-4 sm:py-6 bg-gradient-to-br from-gold-light via-gold to-gold-dark rounded-2xl text-vertus-black font-black text-base sm:text-xl tracking-tight uppercase shadow-2xl shadow-gold/20 hover:shadow-gold/40 hover:scale-[1.02] transition-all flex items-center justify-center gap-3 sm:gap-4 overflow-hidden"
+              className="group relative w-full sm:w-auto px-8 sm:px-10 py-4 sm:py-5 bg-gradient-to-br from-gold-light via-gold to-gold-dark rounded-2xl text-vertus-black font-black text-base sm:text-lg tracking-tight uppercase shadow-2xl shadow-gold/20 hover:shadow-gold/40 hover:scale-[1.02] transition-all flex items-center justify-center gap-3 sm:gap-4 overflow-hidden"
             >
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent w-full h-full -skew-x-12 animate-shine pointer-events-none" />
               <span className="relative z-10">INICIAR MEU RAIO-X</span>
@@ -65,70 +65,71 @@ export default function LandingPage({ onStart, onContinue }: LandingPageProps) {
 
         {/* Right: Visual Elements */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.9, rotateY: 20 }}
-          animate={{ opacity: 1, scale: 1, rotateY: 0 }}
-          transition={{ duration: 1, delay: 0.2 }}
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.8, delay: 0.2 }}
           className="relative hidden lg:block"
         >
           {/* Main Card Mockup */}
-          <div className="relative z-10 w-full aspect-[4/3] bg-vertus-gray border border-white/10 rounded-[48px] p-12 shadow-3xl overflow-hidden">
+          <div className="relative z-10 w-full bg-vertus-gray border border-white/10 rounded-3xl lg:rounded-[40px] p-8 shadow-3xl overflow-hidden">
             <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-gold via-white/10 to-gold opacity-30" />
             
-            <div className="flex justify-between items-start mb-16">
-              <div className="space-y-3">
-                <div className="h-5 w-40 bg-white/10 rounded-full" />
-                <div className="h-10 w-64 bg-white/20 rounded-full" />
+            <div className="flex justify-between items-start mb-8">
+              <div className="space-y-2">
+                <div className="h-4 w-32 bg-white/10 rounded-full" />
+                <div className="h-8 w-48 bg-white/20 rounded-full" />
               </div>
-              <div className="w-20 h-20 rounded-3xl bg-gold/20 flex items-center justify-center border border-gold/30 shadow-xl shadow-gold/10">
-                <TrendingUp className="text-gold" size={40} />
+              <div className="w-14 h-14 rounded-2xl bg-gold/20 flex items-center justify-center border border-gold/30 shadow-xl shadow-gold/10 shrink-0">
+                <TrendingUp className="text-gold" size={28} />
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-10">
-              <div className="space-y-8">
-                <div className="h-36 w-full bg-white/5 rounded-3xl border border-white/5 p-8 flex flex-col justify-between group hover:bg-white/10 transition-colors">
-                  <BarChart3 className="text-white/40" size={24} />
-                  <div className="space-y-3">
-                    <div className="h-2.5 w-16 bg-white/10 rounded-full" />
-                    <div className="h-5 w-28 bg-gold rounded-full" />
+            <div className="grid grid-cols-2 gap-6 items-stretch">
+              <div className="space-y-4 flex flex-col justify-between">
+                <div className="bg-white/5 rounded-2xl border border-white/5 p-5 flex flex-col justify-between gap-3 group hover:bg-white/10 transition-colors">
+                  <BarChart3 className="text-white/40" size={20} />
+                  <div className="space-y-2">
+                    <div className="h-2 w-12 bg-white/10 rounded-full" />
+                    <div className="h-4 w-24 bg-gold rounded-full" />
                   </div>
                 </div>
-                <div className="h-36 w-full bg-white/5 rounded-3xl border border-white/5 p-8 flex flex-col justify-between group hover:bg-white/10 transition-colors">
-                  <PieChart className="text-white/40" size={24} />
-                  <div className="space-y-3">
-                    <div className="h-2.5 w-16 bg-white/10 rounded-full" />
-                    <div className="h-5 w-28 bg-white/30 rounded-full" />
+                <div className="bg-white/5 rounded-2xl border border-white/5 p-5 flex flex-col justify-between gap-3 group hover:bg-white/10 transition-colors">
+                  <PieChart className="text-white/40" size={20} />
+                  <div className="space-y-2">
+                    <div className="h-2 w-12 bg-white/10 rounded-full" />
+                    <div className="h-4 w-24 bg-white/30 rounded-full" />
                   </div>
                 </div>
               </div>
-              <div className="h-full w-full bg-white/5 rounded-3xl border border-white/5 p-10 flex flex-col items-center justify-center gap-8 group hover:bg-white/10 transition-colors">
-                <div className="relative w-40 h-40 flex items-center justify-center">
-                  <svg className="w-full h-full transform -rotate-90">
-                    <circle cx="80" cy="80" r="74" stroke="currentColor" strokeWidth="12" fill="transparent" className="text-white/5" />
+
+              <div className="bg-white/5 rounded-2xl border border-white/5 p-6 flex flex-col items-center justify-center gap-4 group hover:bg-white/10 transition-colors">
+                <div className="relative w-32 h-32 flex items-center justify-center">
+                  <svg className="w-full h-full transform -rotate-90" viewBox="0 0 160 160">
+                    <circle cx="80" cy="80" r="68" stroke="currentColor" strokeWidth="12" fill="transparent" className="text-white/5" />
                     <motion.circle 
-                      initial={{ strokeDashoffset: 465 }}
-                      animate={{ strokeDashoffset: 465 - (465 * 0.72) }}
+                      initial={{ strokeDashoffset: 427 }}
+                      animate={{ strokeDashoffset: 427 - (427 * 0.72) }}
                       transition={{ duration: 2, delay: 0.5 }}
-                      cx="80" cy="80" r="74" stroke="currentColor" strokeWidth="12" fill="transparent" strokeDasharray="465" className="text-gold" 
+                      cx="80" cy="80" r="68" stroke="currentColor" strokeWidth="12" fill="transparent" strokeDasharray="427" className="text-gold" 
                     />
                   </svg>
-                  <span className="absolute text-4xl font-black text-white">72%</span>
+                  <span className="absolute text-3xl font-black text-white">72%</span>
                 </div>
-                <span className="text-xs font-black tracking-[0.2em] uppercase text-white/40">Índice VERTUS</span>
+                <span className="text-[10px] font-black tracking-[0.2em] uppercase text-white/40">Índice VERTUS</span>
               </div>
             </div>
           </div>
 
           {/* Floating Elements */}
           <motion.div
-            animate={{ y: [0, -30, 0], rotate: [0, 5, 0] }}
+            animate={{ y: [0, -20, 0] }}
             transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-            className="absolute -top-16 -right-16 w-48 h-48 bg-gradient-to-br from-gold to-gold-dark rounded-full opacity-10 blur-3xl"
+            className="absolute -top-12 -right-12 w-40 h-40 bg-gradient-to-br from-gold to-gold-dark rounded-full opacity-10 blur-3xl"
           />
           <motion.div
-            animate={{ y: [0, 30, 0], rotate: [0, -5, 0] }}
+            animate={{ y: [0, 20, 0] }}
             transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-            className="absolute -bottom-16 -left-16 w-72 h-72 bg-gold rounded-full opacity-5 blur-3xl"
+            className="absolute -bottom-12 -left-12 w-60 h-60 bg-gold rounded-full opacity-5 blur-3xl"
           />
         </motion.div>
       </div>
