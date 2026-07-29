@@ -1,0 +1,104 @@
+{
+  "entities": {
+    "Lead": {
+      "title": "Lead",
+      "description": "Informações de contato e empresa do lead",
+      "type": "object",
+      "properties": {
+        "companyName": { "type": "string" },
+        "responsibleName": { "type": "string" },
+        "whatsapp": { "type": "string" },
+        "email": { "type": "string" },
+        "location": { "type": "string" },
+        "monthlyRevenue": { "type": "string" },
+        "employeeCount": { "type": "string" },
+        "segment": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "userId": { "type": "string", "description": "UID do usuário que criou o lead" }
+      },
+      "required": ["companyName", "responsibleName", "email", "createdAt"]
+    },
+    "DiagnosisResponse": {
+      "title": "DiagnosisResponse",
+      "description": "Resultado do diagnóstico financeiro",
+      "type": "object",
+      "properties": {
+        "leadId": { "type": "string" },
+        "score": { "type": "number" },
+        "classification": { "type": "string", "enum": ["Crítica", "Atenção", "Saudável"] },
+        "dimensions": {
+          "type": "object",
+          "properties": {
+            "fluxoCaixa": { "type": "number" },
+            "precificacao": { "type": "number" },
+            "controle": { "type": "number" },
+            "previsibilidade": { "type": "number" },
+            "custosRentabilidade": { "type": "number" },
+            "processos": { "type": "number" }
+          }
+        },
+        "responses": { "type": "object" },
+        "monthlyLoss": { "type": "number" },
+        "benchmark": { "type": "number" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "userId": { "type": "string" }
+      },
+      "required": ["leadId", "score", "classification", "createdAt"]
+    },
+    "AdminSettings": {
+      "title": "AdminSettings",
+      "description": "Configurações globais do sistema",
+      "type": "object",
+      "properties": {
+        "aiPrompt": { "type": "string" },
+        "financialContent": { "type": "string" },
+        "strategicGuidelines": { "type": "string" }
+      }
+    },
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "Perfil do usuário e progresso",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "email": { "type": "string" },
+        "role": { "type": "string", "enum": ["admin", "user"] },
+        "isTrainingComplete": { "type": "boolean" },
+        "lastAccess": { "type": "string", "format": "date-time" }
+      }
+    },
+    "Specialist": {
+      "title": "Specialist",
+      "description": "Informações de perfil dos especialistas da Vertus",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "role": { "type": "string" },
+        "imageUrl": { "type": "string", "description": "URL da imagem do especialista" }
+      },
+      "required": ["imageUrl"]
+    }
+  },
+  "firestore": {
+    "/leads/{leadId}": {
+      "schema": "Lead",
+      "description": "Coleção de leads captados"
+    },
+    "/diagnoses/{diagnosisId}": {
+      "schema": "DiagnosisResponse",
+      "description": "Resultados dos diagnósticos vinculados aos leads"
+    },
+    "/settings/global": {
+      "schema": "AdminSettings",
+      "description": "Configurações globais de administração"
+    },
+    "/users/{userId}": {
+      "schema": "UserProfile",
+      "description": "Dados de perfil e progresso dos usuários"
+    },
+    "/specialists/{name}": {
+      "schema": "Specialist",
+      "description": "Fotos e perfis dos especialistas (marcia, kaue, felipe)"
+    }
+  }
+}

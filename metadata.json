@@ -1,0 +1,6 @@
+{
+  "name": "Raio-X Financeiro Vertus",
+  "description": "Diagnóstico financeiro inteligente com geração de score, análise por IA e dashboard estratégico.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
