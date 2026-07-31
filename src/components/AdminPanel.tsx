@@ -37,6 +37,7 @@ export default function AdminPanel({ onLogout }: AdminPanelProps) {
   });
   const [isSavingSettings, setIsSavingSettings] = useState(false);
   const [leadToDelete, setLeadToDelete] = useState<string | null>(null);
+  const [userToDelete, setUserToDelete] = useState<{ id: string; email: string; name: string } | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isUpdatingRole, setIsUpdatingRole] = useState<string | null>(null);
 
@@ -94,6 +95,18 @@ export default function AdminPanel({ onLogout }: AdminPanelProps) {
       setLeads(await storage.getLeads());
       setDiagnoses(await storage.getDiagnoses());
       setLeadToDelete(null);
+    }
+  };
+
+  const handleDeleteUser = (user: { id: string; email: string; name: string }) => {
+    setUserToDelete(user);
+  };
+
+  const confirmDeleteUser = async () => {
+    if (userToDelete) {
+      await storage.deleteUser(userToDelete.id);
+      setCloudUsers(await storage.getCloudUsers());
+      setUserToDelete(null);
     }
   };
 
@@ -610,6 +623,7 @@ export default function AdminPanel({ onLogout }: AdminPanelProps) {
                     <th className="px-8 py-4 text-[10px] font-black uppercase tracking-widest text-white/40">Privilégio</th>
                     <th className="px-8 py-4 text-[10px] font-black uppercase tracking-widest text-white/40">Último Acesso</th>
                     <th className="px-8 py-4 text-[10px] font-black uppercase tracking-widest text-white/40">Status do Diagnóstico</th>
+                    <th className="px-8 py-4 text-[10px] font-black uppercase tracking-widest text-white/40 text-right">Ações</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-white/5">
@@ -618,7 +632,7 @@ export default function AdminPanel({ onLogout }: AdminPanelProps) {
                     u.email?.toLowerCase().includes(searchTerm.toLowerCase())
                   ).length === 0 ? (
                     <tr>
-                      <td colSpan={5} className="px-8 py-20 text-center">
+                      <td colSpan={6} className="px-8 py-20 text-center">
                         <div className="flex flex-col items-center gap-4 text-white/20">
                           <Users size={40} />
                           <p className="text-xs font-black uppercase tracking-widest">Nenhum login registrado</p>
@@ -689,6 +703,15 @@ export default function AdminPanel({ onLogout }: AdminPanelProps) {
                               Apenas Criou Conta
                             </span>
                           )}
+                        </td>
+                        <td className="px-8 py-6 text-right">
+                          <button
+                            onClick={() => handleDeleteUser({ id: u.id, email: u.email, name: u.name || "Sem Nome" })}
+                            title="Excluir Conta / Login"
+                            className="p-2.5 bg-red-500/10 border border-red-500/20 text-red-500 hover:bg-red-500/20 rounded-xl transition-all"
+                          >
+                            <Trash2 size={15} />
+                          </button>
                         </td>
                       </tr>
                     );
@@ -1294,7 +1317,7 @@ export default function AdminPanel({ onLogout }: AdminPanelProps) {
           </div>
         )}
       </AnimatePresence>
-      {/* Confirmation Modal */}
+      {/* Confirmation Modal - Lead */}
       <AnimatePresence>
         {leadToDelete && (
           <div className="fixed inset-0 z-[110] flex items-center justify-center p-6">
@@ -1315,7 +1338,7 @@ export default function AdminPanel({ onLogout }: AdminPanelProps) {
                 <Trash2 size={32} className="text-red-500" />
               </div>
               <div className="space-y-2">
-                <h3 className="text-xl font-bold text-white uppercase tracking-tight">Confirmar Exclusão</h3>
+                <h3 className="text-xl font-bold text-white uppercase tracking-tight">Confirmar Exclusão do Lead</h3>
                 <p className="text-sm text-white/40">
                   Tem certeza que deseja excluir este lead? Esta ação não pode ser desfeita e todos os dados do diagnóstico serão perdidos.
                 </p>
@@ -1329,6 +1352,51 @@ export default function AdminPanel({ onLogout }: AdminPanelProps) {
                 </button>
                 <button
                   onClick={confirmDelete}
+                  className="flex-1 px-6 py-3 bg-red-500 text-white font-bold rounded-xl hover:bg-red-600 transition-all shadow-lg shadow-red-500/20"
+                >
+                  Excluir
+                </button>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* Confirmation Modal - User */}
+      <AnimatePresence>
+        {userToDelete && (
+          <div className="fixed inset-0 z-[110] flex items-center justify-center p-6">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setUserToDelete(null)}
+              className="absolute inset-0 bg-vertus-black/80 backdrop-blur-sm"
+            />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              className="relative w-full max-w-md bg-vertus-gray border border-white/10 rounded-[32px] shadow-2xl overflow-hidden p-8 text-center space-y-6"
+            >
+              <div className="w-16 h-16 bg-red-500/10 rounded-full flex items-center justify-center mx-auto">
+                <Trash2 size={32} className="text-red-500" />
+              </div>
+              <div className="space-y-2">
+                <h3 className="text-xl font-bold text-white uppercase tracking-tight">Excluir Conta / Login</h3>
+                <p className="text-sm text-white/40">
+                  Tem certeza que deseja excluir a conta de <strong className="text-white">{userToDelete.name}</strong> ({userToDelete.email})? Esta ação removerá a conta do sistema.
+                </p>
+              </div>
+              <div className="flex gap-4">
+                <button
+                  onClick={() => setUserToDelete(null)}
+                  className="flex-1 px-6 py-3 bg-white/5 border border-white/10 rounded-xl text-white/60 font-bold hover:bg-white/10 transition-all"
+                >
+                  Cancelar
+                </button>
+                <button
+                  onClick={confirmDeleteUser}
                   className="flex-1 px-6 py-3 bg-red-500 text-white font-bold rounded-xl hover:bg-red-600 transition-all shadow-lg shadow-red-500/20"
                 >
                   Excluir

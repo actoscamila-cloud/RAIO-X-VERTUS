@@ -102,6 +102,20 @@ export const storage = {
       }
     }
   },
+  deleteUser: async (userId: string) => {
+    if (auth.currentUser) {
+      try {
+        console.log(`storage.deleteUser: Deleting user ${userId}`);
+        await deleteDoc(doc(db, "users", userId));
+        console.log("storage.deleteUser: Success");
+      } catch (error) {
+        console.error("storage.deleteUser: Error:", error);
+        handleFirestoreError(error, "delete", `users/${userId}`);
+      }
+    }
+    const users = (JSON.parse(localStorage.getItem(USERS_KEY) || "[]") as any[]).filter(u => u.id !== userId && u.uid !== userId);
+    localStorage.setItem(USERS_KEY, JSON.stringify(users));
+  },
   saveUser: async (user: { email: string; name: string, uid?: string }) => {
     console.log("storage.saveUser: Saving user data...", user.email);
     // Local fallback
