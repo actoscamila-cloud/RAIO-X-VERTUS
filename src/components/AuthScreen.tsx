@@ -390,7 +390,7 @@ export default function AuthScreen({ onAuthComplete, onBack }: AuthScreenProps) 
 
         <div className="mt-8 flex items-center justify-center gap-2 text-white/10">
           <Sparkles size={14} />
-          <span className="text-[10px] font-black uppercase tracking-[0.3em]">VERTUS Consultoria de Elite</span>
+          <span className="text-[10px] font-black uppercase tracking-[0.3em]">VERTUS Performance</span>
         </div>
       </motion.div>
     </div>

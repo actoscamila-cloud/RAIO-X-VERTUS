@@ -49,7 +49,7 @@ export default function Layout({
 
       {/* Header */}
       {!hideHeader && (
-        <header className="sticky top-0 z-[100] border-b border-white/5 backdrop-blur-xl bg-vertus-black/90 overflow-hidden">
+        <header className="sticky top-0 z-30 border-b border-white/5 backdrop-blur-xl bg-vertus-black/90 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-gold/5 via-transparent to-gold/5 opacity-50 pointer-events-none" />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3.5 sm:py-4 flex justify-between items-center relative z-10 min-w-0">
           <div className="flex items-center gap-3 sm:gap-6 shrink-0">
@@ -68,7 +68,7 @@ export default function Layout({
                   Raio-X <span className="text-gold">Financeiro</span>
                 </div>
                 <p className="text-[8px] sm:text-[9px] font-black text-gold/50 uppercase tracking-[0.2em] mt-0.5 whitespace-nowrap">
-                  Consultoria Estratégica
+                  Performance Empresarial
                 </p>
               </div>
             </div>

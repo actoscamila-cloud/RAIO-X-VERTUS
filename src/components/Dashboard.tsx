@@ -13,6 +13,7 @@ interface DashboardProps {
   lead: Lead;
   onNext: () => void;
   isTrainingComplete?: boolean;
+  onOpenAboutVertus?: () => void;
 }
 
 const DIMENSION_NAMES: Record<keyof DiagnosisResponse["dimensions"], string> = {
@@ -29,7 +30,7 @@ import AboutVertus from "./AboutVertus";
 import StrategicPlanModal from "./StrategicPlanModal";
 import { AnimatePresence } from "motion/react";
 
-export default function Dashboard({ diagnosis, lead, onNext, isTrainingComplete }: DashboardProps) {
+export default function Dashboard({ diagnosis, lead, onNext, isTrainingComplete, onOpenAboutVertus }: DashboardProps) {
   const dashboardRef = useRef<HTMLDivElement>(null);
   const [isExporting, setIsExporting] = useState(false);
   const [showAbout, setShowAbout] = useState(false);
@@ -262,7 +263,21 @@ export default function Dashboard({ diagnosis, lead, onNext, isTrainingComplete 
         }}
         lead={lead}
         diagnosis={diagnosis}
+        onOpenAboutVertus={onOpenAboutVertus || (() => setShowAbout(true))}
       />
+
+      <AnimatePresence>
+        {showAbout && (
+          <AboutVertus 
+            onClose={() => setShowAbout(false)} 
+            hasCompletedDiagnosis={true}
+            onNavigateToActionPlan={() => {
+              setShowAbout(false);
+              setShowStrategicModal(true);
+            }}
+          />
+        )}
+      </AnimatePresence>
     </div>
   );
 }

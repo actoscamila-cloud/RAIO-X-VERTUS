@@ -18,9 +18,10 @@ interface ActionPlanProps {
   isLocked?: boolean;
   onNavigateToTraining?: () => void;
   onBackToDashboard?: () => void;
+  onOpenAboutVertus?: () => void;
 }
 
-export default function ActionPlan({ diagnosis, lead, isLocked, onNavigateToTraining, onBackToDashboard }: ActionPlanProps) {
+export default function ActionPlan({ diagnosis, lead, isLocked, onNavigateToTraining, onBackToDashboard, onOpenAboutVertus }: ActionPlanProps) {
   const [aiAnalysis, setAiAnalysis] = useState<string>("");
   const [isGenerating, setIsGenerating] = useState(false);
   const [isExporting, setIsExporting] = useState(false);
@@ -295,6 +296,7 @@ export default function ActionPlan({ diagnosis, lead, isLocked, onNavigateToTrai
             onClose={() => setShowStrategicModal(false)}
             lead={lead}
             diagnosis={diagnosis}
+            onOpenAboutVertus={onOpenAboutVertus}
           />
 
           {/* Support Info */}
@@ -304,6 +306,24 @@ export default function ActionPlan({ diagnosis, lead, isLocked, onNavigateToTrai
               Dúvidas sobre seu plano? Use o Assistente VERTUS em tempo real para clareza imediata sobre qualquer ponto do diagnóstico.
             </p>
           </div>
+
+          {/* Conheça a Vertus Card in Sidebar */}
+          <button
+            onClick={() => {
+              if (onOpenAboutVertus) onOpenAboutVertus();
+              window.dispatchEvent(new CustomEvent("open-about-vertus"));
+            }}
+            className="group relative w-full p-4 bg-gradient-to-br from-gold/15 via-gold/5 to-transparent border border-gold/30 hover:border-gold rounded-2xl flex items-center justify-between gap-3 text-left transition-all hover:scale-[1.01] shadow-lg cursor-pointer"
+          >
+              <div className="space-y-0.5">
+                <span className="text-[9px] font-black text-gold uppercase tracking-widest block">Autoridade & Resultados</span>
+                <h4 className="text-xs font-bold text-white uppercase tracking-tight">Conheça a VERTUS</h4>
+                <p className="text-[10px] text-white/50 leading-tight">Especialista em performance empresarial</p>
+              </div>
+            <div className="w-8 h-8 rounded-xl bg-gold/20 text-gold flex items-center justify-center shrink-0 border border-gold/30 group-hover:scale-110 transition-transform">
+              <Sparkles size={16} />
+            </div>
+          </button>
         </div>
       </div>
     </div>

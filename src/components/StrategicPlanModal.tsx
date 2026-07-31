@@ -9,10 +9,18 @@ interface StrategicPlanModalProps {
   onClose: () => void;
   lead: Lead;
   diagnosis?: DiagnosisResponse;
+  onOpenAboutVertus?: () => void;
 }
 
-export default function StrategicPlanModal({ isOpen, onClose, lead, diagnosis }: StrategicPlanModalProps) {
+export default function StrategicPlanModal({ isOpen, onClose, lead, diagnosis, onOpenAboutVertus }: StrategicPlanModalProps) {
   const [activeTab, setActiveTab] = useState<"calendly" | "whatsapp">("calendly");
+
+  const handleAboutClick = () => {
+    if (onOpenAboutVertus) {
+      onOpenAboutVertus();
+    }
+    window.dispatchEvent(new CustomEvent("open-about-vertus"));
+  };
 
   if (!isOpen) return null;
 
@@ -27,7 +35,7 @@ export default function StrategicPlanModal({ isOpen, onClose, lead, diagnosis }:
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-[120] flex items-center justify-center p-3 sm:p-6 overflow-y-auto">
+      <div className="fixed inset-0 z-[200] flex items-center justify-center p-3 sm:p-6 pt-20 sm:pt-24 pb-10 overflow-y-auto">
         {/* Backdrop */}
         <motion.div
           initial={{ opacity: 0 }}
@@ -133,6 +141,27 @@ export default function StrategicPlanModal({ isOpen, onClose, lead, diagnosis }:
               </p>
             </div>
 
+            {/* Trust / Authority CTA for hesitant leads */}
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-3 bg-gradient-to-r from-gold/15 via-gold/5 to-transparent border border-gold/30 p-3.5 sm:p-4 rounded-xl shadow-md">
+              <div className="flex items-center gap-3 text-left">
+                <div className="w-9 h-9 rounded-lg bg-gold/20 border border-gold/40 flex items-center justify-center text-gold shrink-0">
+                  <Building2 size={18} />
+                </div>
+                <div>
+                  <span className="text-xs font-bold text-white block">Quer entender mais sobre quem é a VERTUS?</span>
+                  <span className="text-[10px] text-white/60 block">Conheça nossa autoridade, metodologia e os estrategistas por trás da sua entrega.</span>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={handleAboutClick}
+                className="w-full sm:w-auto px-5 py-2.5 bg-gradient-to-br from-gold-light via-gold to-gold-dark text-vertus-black font-black text-[11px] uppercase tracking-wider rounded-lg hover:scale-[1.02] transition-all shrink-0 flex items-center justify-center gap-2 border border-white/20 shadow-md cursor-pointer"
+              >
+                <Sparkles size={14} />
+                <span>Conheça a VERTUS</span>
+              </button>
+            </div>
+
             {/* Action Toggles */}
             <div className="space-y-4">
               <div className="flex bg-white/5 border border-white/10 p-1 rounded-xl">
@@ -213,6 +242,27 @@ export default function StrategicPlanModal({ isOpen, onClose, lead, diagnosis }:
                   </a>
                 </div>
               )}
+
+              {/* Trust / Authority CTA right below scheduling frame */}
+              <div className="pt-2 flex flex-col sm:flex-row items-center justify-between gap-3 bg-gradient-to-r from-gold/15 via-gold/5 to-transparent border border-gold/30 p-4 rounded-xl shadow-md">
+                <div className="flex items-center gap-3 text-left">
+                  <div className="w-9 h-9 rounded-lg bg-gold/20 border border-gold/40 flex items-center justify-center text-gold shrink-0">
+                    <Building2 size={18} />
+                  </div>
+                  <div>
+                    <span className="text-xs font-bold text-white block">Quer entender mais sobre quem é a VERTUS?</span>
+                    <span className="text-[10px] text-white/60 block">Conheça nossa autoridade, metodologia e os estrategistas por trás da sua entrega.</span>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={handleAboutClick}
+                  className="w-full sm:w-auto px-5 py-2.5 bg-gradient-to-br from-gold-light via-gold to-gold-dark text-vertus-black font-black text-[11px] uppercase tracking-wider rounded-lg hover:scale-[1.02] transition-all shrink-0 flex items-center justify-center gap-2 border border-white/20 shadow-md cursor-pointer"
+                >
+                  <Sparkles size={14} />
+                  <span>Conheça a VERTUS</span>
+                </button>
+              </div>
             </div>
           </div>
         </motion.div>

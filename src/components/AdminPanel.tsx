@@ -406,7 +406,7 @@ export default function AdminPanel({ onLogout }: AdminPanelProps) {
               <h1 className="text-3xl font-black tracking-tighter text-white uppercase italic">VERTUS</h1>
               <h1 className="text-3xl font-black tracking-tighter text-white uppercase">RAIO-X FINANCEIRO</h1>
             </div>
-            <p className="text-white/20 text-[10px] font-black uppercase tracking-[0.4em]">Consultoria Estratégica</p>
+            <p className="text-white/20 text-[10px] font-black uppercase tracking-[0.4em]">Vertus Performance</p>
           </div>
         </div>
 

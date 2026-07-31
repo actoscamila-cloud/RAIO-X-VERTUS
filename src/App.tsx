@@ -77,6 +77,34 @@ export default function App() {
   const [showAbout, setShowAbout] = useState(false);
   const [isAuthReady, setIsAuthReady] = useState(false);
 
+  // Listener for open-about-vertus and navigation events
+  useEffect(() => {
+    const handleOpenAbout = () => setShowAbout(true);
+    const handleNavigateActionPlan = () => {
+      setShowAbout(false);
+      setState("action-plan");
+    };
+    const handleNavigateDiagnosis = () => {
+      setShowAbout(false);
+      if (diagnosis) {
+        setState("dashboard");
+      } else if (lead) {
+        setState("diagnosis");
+      } else {
+        setState("lead-form");
+      }
+    };
+
+    window.addEventListener("open-about-vertus", handleOpenAbout);
+    window.addEventListener("navigate-to-action-plan", handleNavigateActionPlan);
+    window.addEventListener("navigate-to-diagnosis", handleNavigateDiagnosis);
+    return () => {
+      window.removeEventListener("open-about-vertus", handleOpenAbout);
+      window.removeEventListener("navigate-to-action-plan", handleNavigateActionPlan);
+      window.removeEventListener("navigate-to-diagnosis", handleNavigateDiagnosis);
+    };
+  }, [diagnosis, lead]);
+
   // Auth listener
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
@@ -456,6 +484,7 @@ export default function App() {
                 diagnosis={diagnosis} 
                 onNext={handleNextToTraining}
                 isTrainingComplete={isTrainingComplete}
+                onOpenAboutVertus={() => setShowAbout(true)}
               />
               <div className="max-w-5xl mx-auto px-4 sm:px-6 pb-6 space-y-6">
                 <VertusAssistant 
@@ -508,6 +537,7 @@ export default function App() {
                 isLocked={!isTrainingComplete} 
                 onNavigateToTraining={handleNextToTraining}
                 onBackToDashboard={() => setState("dashboard")}
+                onOpenAboutVertus={() => setShowAbout(true)}
               />
             </motion.div>
           )}
@@ -536,7 +566,14 @@ export default function App() {
         </AnimatePresence>
       </Layout>
       <AnimatePresence>
-        {showAbout && <AboutVertus onClose={() => setShowAbout(false)} />}
+        {showAbout && (
+          <AboutVertus 
+            onClose={() => setShowAbout(false)} 
+            hasCompletedDiagnosis={!!diagnosis}
+            onNavigateToActionPlan={() => setState("action-plan")}
+            onNavigateToDiagnosis={() => setState(lead ? "diagnosis" : "lead-form")}
+          />
+        )}
       </AnimatePresence>
     </ErrorBoundary>
   );
