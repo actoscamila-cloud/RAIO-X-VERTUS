@@ -143,7 +143,7 @@ export default function Layout({
                   A VERTUS ajuda empresas a saírem do caos financeiro e tomarem decisões seguras todos os dias.
                 </p>
                 <p className="text-white/20 text-[10px]">
-                  © 2026 VERTUS Consultoria Financeira. Todos os direitos reservados.
+                  © 2026 Vertus Performance. Todos os direitos reservados.
                 </p>
               </div>
               <div className="flex justify-center md:justify-end gap-6 text-[10px] font-black uppercase tracking-widest text-white/40">
