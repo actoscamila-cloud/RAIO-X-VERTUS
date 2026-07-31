@@ -26,12 +26,14 @@ const DIMENSION_NAMES: Record<keyof DiagnosisResponse["dimensions"], string> = {
 
 import { pdfService } from "../services/pdfService";
 import AboutVertus from "./AboutVertus";
+import StrategicPlanModal from "./StrategicPlanModal";
 import { AnimatePresence } from "motion/react";
 
 export default function Dashboard({ diagnosis, lead, onNext, isTrainingComplete }: DashboardProps) {
   const dashboardRef = useRef<HTMLDivElement>(null);
   const [isExporting, setIsExporting] = useState(false);
   const [showAbout, setShowAbout] = useState(false);
+  const [showStrategicModal, setShowStrategicModal] = useState(false);
 
   const handleExport = async () => {
     setIsExporting(true);
@@ -239,10 +241,10 @@ export default function Dashboard({ diagnosis, lead, onNext, isTrainingComplete 
       <div className="flex flex-col items-center gap-3 pt-4">
         <button
           onClick={() => {
-            console.log("Button clicked!");
-            onNext();
+            console.log("Opening Strategic Plan Modal...");
+            setShowStrategicModal(true);
           }}
-          className="group relative px-8 sm:px-10 py-3.5 bg-gradient-to-br from-gold-light via-gold to-gold-dark text-vertus-black font-black text-xs sm:text-sm tracking-wider uppercase rounded-xl hover:scale-[1.01] transition-all flex items-center justify-center gap-3 shadow-xl shadow-gold/20 overflow-hidden"
+          className="group relative px-8 sm:px-10 py-3.5 bg-gradient-to-br from-gold-light via-gold to-gold-dark text-vertus-black font-black text-xs sm:text-sm tracking-wider uppercase rounded-xl hover:scale-[1.01] transition-all flex items-center justify-center gap-3 shadow-xl shadow-gold/20 overflow-hidden cursor-pointer"
         >
           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent w-full h-full -skew-x-12 animate-shine pointer-events-none" />
           <span className="relative z-10">
@@ -252,6 +254,15 @@ export default function Dashboard({ diagnosis, lead, onNext, isTrainingComplete 
         </button>
         <p className="text-white/30 text-[9px] font-black uppercase tracking-widest">Plano estratégico personalizado para estancar a hemorragia financeira</p>
       </div>
+
+      <StrategicPlanModal 
+        isOpen={showStrategicModal}
+        onClose={() => {
+          setShowStrategicModal(false);
+        }}
+        lead={lead}
+        diagnosis={diagnosis}
+      />
     </div>
   );
 }

@@ -269,11 +269,84 @@ export default function AdminPanel({ onLogout }: AdminPanelProps) {
     }
   };
 
+  const [modalTab, setModalTab] = useState<"overview" | "actionPlan">("overview");
+  const [aiActionPlan, setAiActionPlan] = useState<string>("");
+  const [isGeneratingPlan, setIsGeneratingPlan] = useState(false);
+
+  const generateActionPlanForAdmin = async (lead: Lead, diagnosis: DiagnosisResponse) => {
+    setAiActionPlan("");
+    setIsGeneratingPlan(true);
+    
+    try {
+      const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+      
+      const prompt = `TAREFA: Gere um PLANO DE AÇÃO ESTRATÉGICO COMPLETO E DOSSIÊ DE REUNIÃO CONSULTIVA para os consultores da VERTUS utilizarem na reunião com a empresa ${lead.companyName}.
+        
+        Dados da Empresa:
+        - Responsável: ${lead.responsibleName} (${lead.whatsapp}, ${lead.email})
+        - Faturamento Mensal: ${lead.monthlyRevenue}
+        - Funcionários: ${lead.employeeCount}
+        - Score do Raio-X: ${diagnosis.score}/100 (${diagnosis.classification})
+        - Hemorragia Financeira Estimada: R$ ${diagnosis.monthlyLoss.toLocaleString("pt-BR")}/mês
+        - Dimensões Avaliadas: ${JSON.stringify(diagnosis.dimensions)}
+        
+        Gere um relatório estruturado em Markdown com as seguintes seções claras:
+
+        ### 🎯 1. DIAGNÓSTICO TÉCNICO & GARGALO PRINCIPAL
+        - Resumo do momento financeiro da empresa.
+        - Identificação exata da maior vulnerabilidade (ex: precificação incorreta, falta de DFC, falta de conciliação diária).
+
+        ### 🚀 2. PLANO DE AÇÃO ESTRATÉGICO (30, 60 e 90 DIAS)
+        - **Primeiros 30 Dias (Estancamento de Hemorragia):** 3 ações práticas e imediatas.
+        - **60 Dias (Estruturação e Governança):** 2 ações de processos e controles.
+        - **90 Dias (Escala e Margem):** 2 ações para otimização de rentabilidade.
+
+        ### 💼 3. DOSSIÊ DA REUNIÃO CONSULTIVA (PITCH VERTUS)
+        - **Perguntas de Impacto para a Call:** 3 perguntas chave para o consultor fazer ao empresário durante a apresentação.
+        - **Proposta de Solução Ideal:** Recomende qual solução VERTUS faz mais sentido (BPO Financeiro, Consultoria de Precificação, Governança).
+        - **Como Quebrar Objeções:** Dicas para contornar objeções típicas deste perfil de faturamento.`;
+
+      let attempts = 0;
+      const maxAttempts = 3;
+
+      while (attempts < maxAttempts) {
+        try {
+          const response = await ai.models.generateContent({
+            model: "gemini-3.1-flash-lite-preview",
+            contents: prompt,
+            config: {
+              systemInstruction: `${settings.aiPrompt}\n\nDIRETRIZES VERTUS:\n${settings.strategicGuidelines}`
+            }
+          });
+
+          setAiActionPlan(response.text || "Erro ao gerar Plano de Ação.");
+          return;
+        } catch (err: any) {
+          if (err.message?.includes("503") || err.message?.includes("high demand")) {
+            attempts++;
+            if (attempts < maxAttempts) {
+              await new Promise(resolve => setTimeout(resolve, 2000 * attempts));
+              continue;
+            }
+          }
+          throw err;
+        }
+      }
+    } catch (error) {
+      console.error("Erro ao gerar plano de ação:", error);
+      setAiActionPlan("Não foi possível gerar o plano de ação no momento. Tente novamente clicando no botão de atualizar.");
+    } finally {
+      setIsGeneratingPlan(false);
+    }
+  };
+
   const openLeadDetails = (lead: Lead) => {
     setSelectedLead(lead);
+    setModalTab("overview");
     const diagnosis = diagnoses.find(d => d.leadId === lead.id);
     if (diagnosis) {
       generateContactScript(lead, diagnosis);
+      generateActionPlanForAdmin(lead, diagnosis);
     }
   };
 
@@ -795,22 +868,112 @@ export default function AdminPanel({ onLogout }: AdminPanelProps) {
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
               className="relative w-full max-w-4xl bg-vertus-gray border border-white/10 rounded-[40px] shadow-2xl overflow-hidden flex flex-col max-h-[90vh]"
             >
-              <div className="p-8 border-b border-white/5 flex justify-between items-center">
+              <div className="p-6 sm:p-8 border-b border-white/5 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white/[0.02]">
                 <div className="space-y-1">
-                  <h3 className="text-2xl font-bold text-white uppercase tracking-tight">{selectedLead.companyName}</h3>
+                  <div className="flex items-center gap-2">
+                    <span className="text-[9px] font-black uppercase tracking-[0.2em] text-gold">Dossiê do Lead</span>
+                    {selectedLead.companyName && (
+                      <span className="text-[9px] font-black uppercase tracking-wider px-2 py-0.5 bg-gold/10 text-gold rounded border border-gold/20">
+                        VERTUS Raio-X
+                      </span>
+                    )}
+                  </div>
+                  <h3 className="text-xl sm:text-2xl font-bold text-white uppercase tracking-tight">{selectedLead.companyName}</h3>
                   <p className="text-xs text-white/40 font-medium">{selectedLead.responsibleName} • {selectedLead.whatsapp}</p>
                 </div>
-                <button 
-                  onClick={() => setSelectedLead(null)}
-                  className="p-3 bg-white/5 border border-white/10 rounded-2xl text-white/40 hover:text-white transition-all"
-                >
-                  <X size={20} />
-                </button>
+
+                <div className="flex items-center gap-3 w-full sm:w-auto">
+                  <div className="bg-white/5 p-1 rounded-xl border border-white/10 flex w-full sm:w-auto">
+                    <button
+                      onClick={() => setModalTab("overview")}
+                      className={cn(
+                        "flex-1 sm:flex-none px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-wider transition-all flex items-center justify-center gap-1.5",
+                        modalTab === "overview" ? "bg-gold text-vertus-black shadow-md" : "text-white/40 hover:text-white"
+                      )}
+                    >
+                      <LayoutGrid size={13} />
+                      Visão Geral & Script
+                    </button>
+                    <button
+                      onClick={() => setModalTab("actionPlan")}
+                      className={cn(
+                        "flex-1 sm:flex-none px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-wider transition-all flex items-center justify-center gap-1.5",
+                        modalTab === "actionPlan" ? "bg-gold text-vertus-black shadow-md" : "text-gold/70 hover:text-gold"
+                      )}
+                    >
+                      <Sparkles size={13} />
+                      Plano de Ação (IA)
+                    </button>
+                  </div>
+
+                  <button 
+                    onClick={() => setSelectedLead(null)}
+                    className="p-2.5 bg-white/5 border border-white/10 rounded-xl text-white/40 hover:text-white transition-all shrink-0"
+                  >
+                    <X size={18} />
+                  </button>
+                </div>
               </div>
 
-              <div className="flex-1 overflow-y-auto p-10 space-y-10 custom-scrollbar">
+              <div className="flex-1 overflow-y-auto p-6 sm:p-10 space-y-10 custom-scrollbar">
                 {(() => {
                   const diagnosis = diagnoses.find(d => d.leadId === selectedLead.id);
+
+                  if (modalTab === "actionPlan") {
+                    return (
+                      <div className="space-y-8">
+                        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-gold/10 border border-gold/20 p-5 rounded-2xl">
+                          <div className="space-y-1">
+                            <div className="flex items-center gap-2 text-gold">
+                              <Sparkles size={16} />
+                              <span className="text-xs font-black uppercase tracking-wider">Plano de Ação Estratégico para Reunião</span>
+                            </div>
+                            <p className="text-xs text-white/70 max-w-xl">
+                              Análise aprofundada gerada pela IA para os consultores da VERTUS conduzirem a reunião de entrega com a <strong className="text-white">{selectedLead.companyName}</strong>.
+                            </p>
+                          </div>
+
+                          <div className="flex items-center gap-2 w-full sm:w-auto">
+                            <button
+                              onClick={() => diagnosis && generateActionPlanForAdmin(selectedLead, diagnosis)}
+                              disabled={isGeneratingPlan}
+                              className="px-4 py-2.5 bg-gold/20 border border-gold/40 text-gold hover:bg-gold hover:text-vertus-black font-black text-[10px] uppercase tracking-wider rounded-xl transition-all flex items-center justify-center gap-2"
+                            >
+                              <Sparkles size={13} />
+                              {isGeneratingPlan ? "Gerando..." : "Regerar Análise"}
+                            </button>
+
+                            <button
+                              onClick={() => {
+                                navigator.clipboard.writeText(aiActionPlan);
+                                alert("Plano de Ação copiado para a área de transferência!");
+                              }}
+                              className="px-4 py-2.5 bg-white/5 border border-white/10 text-white hover:bg-white/10 font-black text-[10px] uppercase tracking-wider rounded-xl transition-all flex items-center justify-center gap-2"
+                            >
+                              <FileText size={13} />
+                              Copiar Dossiê
+                            </button>
+                          </div>
+                        </div>
+
+                        {/* Action Plan Content */}
+                        <div className="bg-white/5 border border-white/10 rounded-2xl p-6 sm:p-8 space-y-6">
+                          {isGeneratingPlan ? (
+                            <div className="space-y-4 animate-pulse py-12 text-center">
+                              <div className="w-12 h-12 border-2 border-gold/20 border-t-gold rounded-full animate-spin mx-auto mb-4" />
+                              <p className="text-xs font-black text-gold uppercase tracking-widest">Sintetizando Plano de Ação Estratégico com a IA VERTUS...</p>
+                              <p className="text-[10px] text-white/40">Analisando indicadores, hemorragia financeira e plano de 30/60/90 dias.</p>
+                            </div>
+                          ) : (
+                            <div className="prose prose-invert max-w-none text-white/80 text-sm leading-relaxed prose-gold">
+                              <ReactMarkdown>{aiActionPlan || "Nenhum plano gerado ainda. Clique no botão de gerar."}</ReactMarkdown>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    );
+                  }
+
                   return (
                     <div className="grid lg:grid-cols-3 gap-10">
                       {/* Left Column: Lead Info & Diagnosis Summary */}

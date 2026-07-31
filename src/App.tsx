@@ -424,7 +424,7 @@ export default function App() {
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.3 }}
             >
-              <LeadForm onSubmit={handleLeadSubmit} />
+              <LeadForm onSubmit={handleLeadSubmit} userEmail={user?.email} />
             </motion.div>
           )}
           {state === "diagnosis" && lead && (
@@ -472,7 +472,7 @@ export default function App() {
                     <Sparkles size={18} className="relative z-10 shrink-0" />
                     <div className="flex flex-col items-start text-left relative z-10">
                       <span className="text-xs sm:text-sm font-black leading-tight">Conheça a VERTUS</span>
-                      <span className="text-[9px] font-black tracking-widest opacity-70">Consultoria Estratégica de Elite</span>
+                      <span className="text-[9px] font-black tracking-widest opacity-70">Especialista em performance empresarial</span>
                     </div>
                   </button>
                 </div>

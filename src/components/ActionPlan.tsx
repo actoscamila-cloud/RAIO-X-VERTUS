@@ -10,6 +10,7 @@ import { pdfService } from "../services/pdfService";
 import { ActionMovement } from "../types";
 import { AnimatePresence } from "motion/react";
 import { storage } from "../lib/storage";
+import StrategicPlanModal from "./StrategicPlanModal";
 
 interface ActionPlanProps {
   diagnosis: DiagnosisResponse;
@@ -24,6 +25,7 @@ export default function ActionPlan({ diagnosis, lead, isLocked, onNavigateToTrai
   const [isGenerating, setIsGenerating] = useState(false);
   const [isExporting, setIsExporting] = useState(false);
   const [selectedMovement, setSelectedMovement] = useState<ActionMovement | null>(null);
+  const [showStrategicModal, setShowStrategicModal] = useState(false);
 
   useEffect(() => {
     const generateAIAnalysis = async () => {
@@ -260,6 +262,14 @@ export default function ActionPlan({ diagnosis, lead, isLocked, onNavigateToTrai
 
             <div className="space-y-3 pt-2">
               <button 
+                onClick={() => setShowStrategicModal(true)}
+                className="group relative w-full py-3 bg-vertus-black text-white rounded-xl font-black text-xs uppercase tracking-wider hover:bg-black/80 transition-all flex items-center justify-center gap-2 border border-white/20 shadow-lg"
+              >
+                <Calendar size={15} className="text-gold" />
+                <span>Agendar Apresentação (Calendly)</span>
+              </button>
+
+              <button 
                 onClick={() => {
                   const company = lead?.companyName ? `da ${lead.companyName}` : "da minha empresa";
                   const scoreInfo = diagnosis?.score !== undefined ? ` (Score: ${diagnosis.score}/100)` : "";
@@ -267,18 +277,25 @@ export default function ActionPlan({ diagnosis, lead, isLocked, onNavigateToTrai
                   window.open(`${VERTUS_WHATSAPP_LINK}?text=${text}`, "_blank");
                 }}
                 className={cn(
-                "group relative w-full py-3.5 rounded-xl font-black text-xs sm:text-sm uppercase tracking-wider transition-all hover:scale-[1.01] flex items-center justify-center gap-2.5 overflow-hidden shadow-lg",
-                rec.highlight ? "bg-vertus-black text-white" : "bg-gradient-to-br from-gold-light via-gold to-gold-dark text-vertus-black"
+                "group relative w-full py-3 rounded-xl font-black text-xs uppercase tracking-wider transition-all hover:scale-[1.01] flex items-center justify-center gap-2 overflow-hidden shadow-lg",
+                rec.highlight ? "bg-vertus-black text-gold border border-gold/30" : "bg-gradient-to-br from-gold-light via-gold to-gold-dark text-vertus-black"
               )}>
                 {!rec.highlight && <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent w-full h-full -skew-x-12 animate-shine pointer-events-none" />}
                 <span className="relative z-10">{rec.btn}</span>
-                <ArrowRight size={16} className="relative z-10" />
+                <ArrowRight size={15} className="relative z-10" />
               </button>
               <p className={cn("text-[8px] font-black uppercase tracking-widest text-center", rec.highlight ? "opacity-70" : "text-white/40")}>
                 Vagas limitadas para esta semana
               </p>
             </div>
           </motion.div>
+
+          <StrategicPlanModal
+            isOpen={showStrategicModal}
+            onClose={() => setShowStrategicModal(false)}
+            lead={lead}
+            diagnosis={diagnosis}
+          />
 
           {/* Support Info */}
           <div className="p-5 bg-gold/5 border border-gold/10 rounded-2xl space-y-2">

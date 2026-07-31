@@ -1,6 +1,6 @@
 import React from "react";
 import { motion } from "motion/react";
-import { ArrowRight, ShieldCheck, TrendingUp, BarChart3, PieChart, Lock } from "lucide-react";
+import { ArrowRight, ShieldCheck, TrendingUp, BarChart3, PieChart, Lock, Check, Sparkles, Award } from "lucide-react";
 
 interface LandingPageProps {
   onStart: () => void;
@@ -16,49 +16,72 @@ export default function LandingPage({ onStart, onContinue }: LandingPageProps) {
           initial={{ opacity: 0, x: -30 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.7, ease: "easeOut" }}
-          className="lg:col-span-7 space-y-5 sm:space-y-7 min-w-0"
+          className="lg:col-span-7 space-y-5 sm:space-y-6 min-w-0"
         >
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-gold/10 border border-gold/20 rounded-full text-gold text-[10px] font-black tracking-[0.15em] uppercase shrink-0">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-gold/10 border border-gold/20 rounded-full text-gold text-[10px] font-black tracking-[0.15em] uppercase shrink-0">
             <ShieldCheck size={14} className="shrink-0" />
             <span>Diagnóstico Estratégico VERTUS</span>
           </div>
           
-          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-[2.75rem] font-black tracking-tight leading-[1.2] text-white uppercase break-words">
-            Descubra o verdadeiro estado do seu <span className="text-transparent bg-clip-text bg-gradient-to-br from-gold via-gold-light to-gold-dark">financeiro</span> em menos de 5 minutos
+          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-[2.75rem] font-black tracking-tight leading-[1.18] text-white uppercase break-words">
+            Descubra os <span className="text-transparent bg-clip-text bg-gradient-to-br from-gold via-gold-light to-gold-dark">gargalos invisíveis</span> que estão travando o lucro da sua empresa
           </h1>
           
-          <p className="text-xs sm:text-sm md:text-base text-white/50 leading-relaxed max-w-xl font-medium">
-            Análise estratégica + plano de otimização + recomendações automáticas personalizadas. A VERTUS transforma caos financeiro em clareza e previsibilidade para decisões seguras todos os dias.
+          <p className="text-xs sm:text-sm md:text-base text-white/70 leading-relaxed max-w-xl font-medium">
+            Em menos de 5 minutos, descubra a real saúde do seu negócio e receba seu <strong className="text-white">Índice de Maturidade</strong> + um <strong className="text-gold">Plano de Ação Personalizado para os próximos 30 dias</strong> para eliminar desperdícios e recuperar sua margem.
           </p>
-          
-          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 pt-2">
-            <button
-              onClick={onStart}
-              className="group relative px-6 sm:px-8 py-3.5 sm:py-4 bg-gradient-to-br from-gold-light via-gold to-gold-dark rounded-xl text-vertus-black font-black text-sm sm:text-base tracking-tight uppercase shadow-xl shadow-gold/20 hover:shadow-gold/30 hover:scale-[1.01] transition-all flex items-center justify-center gap-3 overflow-hidden shrink-0"
-            >
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent w-full h-full -skew-x-12 animate-shine pointer-events-none" />
-              <span className="relative z-10 whitespace-nowrap">INICIAR MEU RAIO-X</span>
-              <ArrowRight className="relative z-10 group-hover:translate-x-1.5 transition-transform shrink-0" size={18} />
-            </button>
 
-            {onContinue && (
+          <div className="flex items-center gap-2 pt-1 text-[10px] sm:text-xs text-white/50 font-medium">
+            <Award size={14} className="text-gold shrink-0" />
+            <span>Metodologia desenvolvida por especialistas em gestão e eficiência financeira empresarial.</span>
+          </div>
+          
+          <div className="space-y-4 pt-2">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
               <button
-                onClick={onContinue}
-                className="group px-5 py-3 sm:py-3.5 bg-white/5 border border-white/10 rounded-xl text-white font-bold text-xs uppercase tracking-wider hover:bg-gold/10 hover:border-gold/30 transition-all flex items-center justify-center gap-2 shrink-0"
+                onClick={onStart}
+                className="group relative px-6 sm:px-8 py-3.5 sm:py-4 bg-gradient-to-br from-gold-light via-gold to-gold-dark rounded-xl text-vertus-black font-black text-sm sm:text-base tracking-tight uppercase shadow-xl shadow-gold/20 hover:shadow-gold/30 hover:scale-[1.01] transition-all flex items-center justify-center gap-3 overflow-hidden shrink-0 cursor-pointer"
               >
-                <span className="whitespace-nowrap">Continuar de onde parei</span>
-                <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform shrink-0" />
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent w-full h-full -skew-x-12 animate-shine pointer-events-none" />
+                <span className="relative z-10 whitespace-nowrap">INICIAR MEU RAIO-X GRATUITO</span>
+                <ArrowRight className="relative z-10 group-hover:translate-x-1.5 transition-transform shrink-0" size={18} />
               </button>
-            )}
-            
-            <div className="flex items-center justify-center sm:justify-start gap-2.5 pt-1 sm:pt-0 shrink-0">
-              <div className="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center text-white/40 shrink-0">
-                <Lock size={14} />
+
+              {onContinue && (
+                <button
+                  onClick={onContinue}
+                  className="group px-5 py-3 sm:py-3.5 bg-white/5 border border-white/10 rounded-xl text-white font-bold text-xs uppercase tracking-wider hover:bg-gold/10 hover:border-gold/30 transition-all flex items-center justify-center gap-2 shrink-0"
+                >
+                  <span className="whitespace-nowrap">Continuar de onde parei</span>
+                  <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform shrink-0" />
+                </button>
+              )}
+              
+              <div className="flex items-center justify-center sm:justify-start gap-2.5 shrink-0">
+                <div className="w-8 h-8 rounded-full border border-white/10 flex items-center justify-center text-white/40 shrink-0">
+                  <Lock size={14} />
+                </div>
+                <div className="flex flex-col">
+                  <span className="text-[9px] font-black uppercase tracking-widest text-white/60 whitespace-nowrap">Acesso Seguro</span>
+                  <span className="text-[9px] font-medium text-white/30 uppercase tracking-widest whitespace-nowrap">Dados Criptografados</span>
+                </div>
               </div>
-              <div className="flex flex-col">
-                <span className="text-[9px] font-black uppercase tracking-widest text-white/60 whitespace-nowrap">Acesso Seguro</span>
-                <span className="text-[9px] font-medium text-white/30 uppercase tracking-widest whitespace-nowrap">Dados Criptografados</span>
-              </div>
+            </div>
+
+            {/* Objections reduction badges */}
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-2 pt-1 text-[10px] sm:text-xs font-bold text-white/60">
+              <span className="flex items-center gap-1.5">
+                <Check size={13} className="text-gold" /> Apenas 5 minutos
+              </span>
+              <span className="flex items-center gap-1.5">
+                <Check size={13} className="text-gold" /> 100% gratuito
+              </span>
+              <span className="flex items-center gap-1.5">
+                <Check size={13} className="text-gold" /> Resultado imediato
+              </span>
+              <span className="flex items-center gap-1.5">
+                <Check size={13} className="text-gold" /> Sem compromisso
+              </span>
             </div>
           </div>
         </motion.div>
@@ -134,12 +157,12 @@ export default function LandingPage({ onStart, onContinue }: LandingPageProps) {
         </motion.div>
       </div>
 
-      {/* Trust Badges */}
+      {/* Benefit Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12 sm:mt-20 lg:mt-24 min-w-0">
         {[
-          { title: "Diagnóstico 360°", desc: "Análise profunda de 6 pilares estratégicos do seu financeiro.", icon: BarChart3 },
-          { title: "Score de Previsibilidade", desc: "Entenda o nível de segurança e maturidade do seu negócio.", icon: ShieldCheck },
-          { title: "Plano de Ação com IA", desc: "Receba recomendações automáticas geradas por inteligência artificial.", icon: TrendingUp },
+          { title: "Clareza dos Gargalos", desc: "Identifique exatamente onde sua empresa está perdendo dinheiro e estanque vazamentos de caixa em tempo real.", icon: BarChart3 },
+          { title: "Índice de Maturidade", desc: "Descubra o nível real de previsibilidade, controle e segurança do seu negócio para tomar decisões sem medo.", icon: ShieldCheck },
+          { title: "Plano de Ação de 30 Dias", desc: "Receba metas diretas e um roteiro prático personalizado para aumentar sua rentabilidade e margem de lucro.", icon: TrendingUp },
         ].map((feature, i) => (
           <motion.div
             key={i}
