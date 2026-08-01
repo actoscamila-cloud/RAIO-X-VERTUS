@@ -549,7 +549,19 @@ export default function App() {
               exit={{ opacity: 0, scale: 1.05 }}
               transition={{ duration: 0.3 }}
             >
-              <BpoVertusDetail onBack={handleBack} />
+              <BpoVertusDetail 
+                onBack={handleBack} 
+                onNavigateToDiagnosis={() => {
+                  if (diagnosis) {
+                    setState("dashboard");
+                  } else if (lead) {
+                    setState("diagnosis");
+                  } else {
+                    setState("lead-form");
+                  }
+                }}
+                onNavigateToAboutVertus={() => setShowAbout(true)}
+              />
             </motion.div>
           )}
           {state === "admin" && (

@@ -80,13 +80,13 @@ export default function Layout({
                 onClick={onBpoClick} 
                 className="hover:text-gold transition-all font-black bg-transparent border-none cursor-pointer uppercase py-1 whitespace-nowrap"
               >
-                BPO Vertus
+                COMO TRABALHAMOS
               </button>
               <button 
                 onClick={onVertusFinanceClick} 
                 className="hover:text-gold transition-all font-black bg-transparent border-none cursor-pointer uppercase py-1 whitespace-nowrap"
               >
-                Vertus Finance
+                CONHEÇA A VERTUS
               </button>
               <div className="h-4 w-px bg-white/10 shrink-0" />
               <span className="text-gold flex items-center gap-2 whitespace-nowrap">

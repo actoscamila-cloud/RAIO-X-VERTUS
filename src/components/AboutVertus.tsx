@@ -97,6 +97,12 @@ export default function AboutVertus({
     window.open(`${VERTUS_WHATSAPP_LINK}?text=${encodeURIComponent(text)}`, "_blank");
   };
 
+  const SectionDivider = () => (
+    <div className="w-full flex items-center justify-center py-2">
+      <div className="h-px w-full max-w-4xl bg-gradient-to-r from-transparent via-gold/30 to-transparent" />
+    </div>
+  );
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -190,6 +196,8 @@ export default function AboutVertus({
         </section>
 
         {/* SEÇÃO 2 — IDENTIFICAÇÃO COM A REALIDADE DO EMPRESÁRIO */}
+        <SectionDivider />
+
         <section className="space-y-8">
           <div className="text-center space-y-2 max-w-2xl mx-auto">
             <span className="text-[10px] font-black uppercase tracking-[0.25em] text-gold">Realidade Empresarial</span>
@@ -207,15 +215,19 @@ export default function AboutVertus({
               "As decisões são tomadas com informações ou apenas olhando o saldo bancário?",
               "O financeiro ajuda você a decidir ou apenas resolve urgências diárias?"
             ].map((question, idx) => (
-              <div 
+              <motion.div 
                 key={idx}
+                initial={{ opacity: 0, y: 15 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-30px" }}
+                transition={{ duration: 0.35, delay: idx * 0.05 }}
                 className="bg-white/[0.03] border border-white/10 rounded-2xl p-5 space-y-3 hover:border-gold/40 transition-all hover:bg-white/[0.04] flex flex-col justify-between"
               >
                 <div className="w-8 h-8 rounded-lg bg-gold/10 border border-gold/20 text-gold flex items-center justify-center shrink-0">
                   <HelpCircle size={18} />
                 </div>
                 <p className="text-xs sm:text-sm font-bold text-white leading-relaxed">{question}</p>
-              </div>
+              </motion.div>
             ))}
           </div>
 
@@ -227,6 +239,8 @@ export default function AboutVertus({
         </section>
 
         {/* SEÇÃO 3 — O PROBLEMA NÃO É APENAS FINANCEIRO */}
+        <SectionDivider />
+
         <section className="bg-vertus-gray border border-white/10 rounded-3xl p-6 sm:p-8 space-y-6">
           <div className="space-y-3 max-w-3xl">
             <span className="text-[10px] font-black uppercase tracking-[0.25em] text-gold">Impacto na Gestão</span>
@@ -249,10 +263,17 @@ export default function AboutVertus({
               "Planejamento de caixa",
               "Tranquilidade pessoal"
             ].map((area, idx) => (
-              <div key={idx} className="p-3 bg-black/40 border border-white/10 rounded-xl flex items-center gap-2.5">
+              <motion.div 
+                key={idx}
+                initial={{ opacity: 0, y: 10 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-20px" }}
+                transition={{ duration: 0.3, delay: idx * 0.04 }}
+                className="p-3 bg-black/40 border border-white/10 rounded-xl flex items-center gap-2.5"
+              >
                 <AlertCircle size={15} className="text-gold shrink-0" />
                 <span className="text-xs text-white/80 font-medium">{area}</span>
-              </div>
+              </motion.div>
             ))}
           </div>
 
@@ -264,6 +285,8 @@ export default function AboutVertus({
         </section>
 
         {/* SEÇÃO 4 — A VISÃO DA VERTUS */}
+        <SectionDivider />
+
         <section className="relative bg-gradient-to-br from-gold/15 via-gold/5 to-transparent border border-gold/30 rounded-3xl p-6 sm:p-10 space-y-8 shadow-2xl overflow-hidden">
           <div className="absolute -right-10 -bottom-10 opacity-10 pointer-events-none">
             <Compass size={220} className="text-gold" />
@@ -286,10 +309,17 @@ export default function AboutVertus({
               "Tecnologia acelera processos, mas a estratégia continua sendo humana.",
               "O empresário precisa entender seus números, não apenas recebê-los."
             ].map((p, idx) => (
-              <div key={idx} className="bg-black/50 border border-white/10 p-4 rounded-2xl space-y-2 flex flex-col justify-between">
+              <motion.div 
+                key={idx}
+                initial={{ opacity: 0, y: 15 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-30px" }}
+                transition={{ duration: 0.35, delay: idx * 0.06 }}
+                className="bg-black/50 border border-white/10 p-4 rounded-2xl space-y-2 flex flex-col justify-between"
+              >
                 <CheckCircle2 size={16} className="text-gold" />
                 <p className="text-xs text-white/90 leading-snug font-medium">{p}</p>
-              </div>
+              </motion.div>
             ))}
           </div>
         </section>
@@ -367,6 +397,8 @@ export default function AboutVertus({
         </section>
 
         {/* SEÇÃO 6 — COMO A VERTUS TRANSFORMA A OPERAÇÃO FINANCEIRA */}
+        <SectionDivider />
+
         <section className="space-y-8">
           <div className="text-center space-y-2 max-w-2xl mx-auto">
             <span className="text-[10px] font-black uppercase tracking-[0.25em] text-gold">Sequência de Transformação</span>
@@ -412,7 +444,14 @@ export default function AboutVertus({
                 desc: "A estrutura não é abandonada após a implantação. A Vertus acompanha a operação, identifica melhorias e ajuda o financeiro a evoluir junto com a empresa." 
               }
             ].map((item, idx) => (
-              <div key={idx} className="bg-vertus-gray border border-white/10 rounded-2xl p-5 space-y-3 relative overflow-hidden group hover:border-gold/40 transition-all flex flex-col justify-between">
+              <motion.div 
+                key={idx} 
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-40px" }}
+                transition={{ duration: 0.35, delay: idx * 0.06 }}
+                className="bg-vertus-gray border border-white/10 rounded-2xl p-5 space-y-3 relative overflow-hidden group hover:border-gold/40 transition-all flex flex-col justify-between"
+              >
                 <div className="space-y-2">
                   <div className="flex justify-between items-center">
                     <span className="text-[10px] font-black text-gold uppercase tracking-widest bg-gold/10 border border-gold/20 px-2.5 py-1 rounded-lg">
@@ -428,12 +467,14 @@ export default function AboutVertus({
                   )}
                   <p className="text-xs text-white/60 leading-relaxed pt-1">{item.desc}</p>
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
         </section>
 
         {/* SEÇÃO 7 — COMO A ATUAÇÃO ACONTECE NA PRÁTICA (BPO VERTUS) */}
+        <SectionDivider />
+
         <section className="bg-gradient-to-br from-gold/10 via-vertus-gray to-vertus-black border-2 border-gold/50 rounded-3xl p-6 sm:p-10 space-y-8 shadow-2xl relative overflow-hidden">
           <div className="space-y-3 max-w-3xl">
             <span className="text-[10px] font-black text-gold uppercase tracking-[0.25em]">Atuação Prática Vertus</span>
@@ -458,10 +499,17 @@ export default function AboutVertus({
               "Suporte especializado direto ao empresário",
               "Evolução contínua da operação financeira"
             ].map((item, idx) => (
-              <div key={idx} className="p-3.5 bg-black/50 border border-white/10 rounded-xl flex items-start gap-2">
+              <motion.div 
+                key={idx} 
+                initial={{ opacity: 0, y: 12 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-20px" }}
+                transition={{ duration: 0.3, delay: idx * 0.04 }}
+                className="p-3.5 bg-black/50 border border-white/10 rounded-xl flex items-start gap-2"
+              >
                 <CheckCircle2 size={15} className="text-gold shrink-0 mt-0.5" />
                 <span className="text-xs text-white/90 font-medium leading-snug">{item}</span>
-              </div>
+              </motion.div>
             ))}
           </div>
 
@@ -473,6 +521,8 @@ export default function AboutVertus({
         </section>
 
         {/* SEÇÃO 8 — TECNOLOGIA E INTELIGÊNCIA ARTIFICIAL COMO APOIO */}
+        <SectionDivider />
+
         <section className="bg-white/[0.02] border border-white/10 rounded-3xl p-6 sm:p-8 space-y-6">
           <div className="space-y-2 max-w-2xl">
             <span className="text-[10px] font-black text-gold uppercase tracking-[0.25em]">Tecnologia & Pessoas</span>
@@ -491,13 +541,20 @@ export default function AboutVertus({
               { icon: Users, label: "Especialistas Interpretam", text: "Transformam os dados em orientações coerentes com a realidade da empresa." },
               { icon: ShieldCheck, label: "O Empresário Decide", text: "Recebe informações mais claras para contratar, investir, reduzir custos ou planejar." }
             ].map((item, idx) => (
-              <div key={idx} className="bg-black/40 border border-white/10 p-4 rounded-xl space-y-2">
+              <motion.div 
+                key={idx} 
+                initial={{ opacity: 0, scale: 0.95 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true, margin: "-30px" }}
+                transition={{ duration: 0.35, delay: idx * 0.06 }}
+                className="bg-black/40 border border-white/10 p-4 rounded-xl space-y-2"
+              >
                 <div className="w-8 h-8 rounded-lg bg-gold/15 border border-gold/30 text-gold flex items-center justify-center">
                   <item.icon size={16} />
                 </div>
                 <h3 className="text-xs font-bold text-white uppercase">{item.label}</h3>
                 <p className="text-[11px] text-white/50 leading-relaxed">{item.text}</p>
-              </div>
+              </motion.div>
             ))}
           </div>
 
@@ -512,6 +569,8 @@ export default function AboutVertus({
         </section>
 
         {/* SEÇÃO 9 — SITUAÇÕES DE ORGANIZAÇÃO INTENSIVA */}
+        <SectionDivider />
+
         <section className="bg-vertus-gray border border-white/10 rounded-3xl p-6 sm:p-8 space-y-4">
           <div className="flex items-center gap-3">
             <div className="w-9 h-9 rounded-lg bg-gold/15 border border-gold/30 text-gold flex items-center justify-center shrink-0">
@@ -531,6 +590,8 @@ export default function AboutVertus({
         </section>
 
         {/* SEÇÃO 10 — O QUE MUDA QUANDO O EMPRESÁRIO VOLTA A CONFIAR NOS NÚMEROS DA EMPRESA */}
+        <SectionDivider />
+
         <section className="space-y-8">
           <div className="text-center space-y-2 max-w-2xl mx-auto">
             <span className="text-[10px] font-black uppercase tracking-[0.25em] text-gold">Comparativo Real</span>
@@ -555,10 +616,17 @@ export default function AboutVertus({
                   "Cada mês traz novas surpresas e sobressaltos",
                   "As informações chegam atrasadas ou não são confiáveis"
                 ].map((text, idx) => (
-                  <li key={idx} className="flex items-start gap-2 text-xs text-white/60">
+                  <motion.li 
+                    key={idx} 
+                    initial={{ opacity: 0, x: -10 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true, margin: "-20px" }}
+                    transition={{ duration: 0.3, delay: idx * 0.05 }}
+                    className="flex items-start gap-2 text-xs text-white/60"
+                  >
                     <span className="w-1.5 h-1.5 rounded-full bg-red-400 shrink-0 mt-1.5" />
                     <span>{text}</span>
-                  </li>
+                  </motion.li>
                 ))}
               </ul>
             </div>
@@ -578,10 +646,17 @@ export default function AboutVertus({
                   "Mais segurança para investir, contratar ou crescer",
                   "Menos tempo gasto tentando organizar o financeiro"
                 ].map((text, idx) => (
-                  <li key={idx} className="flex items-start gap-2 text-xs text-white/80 font-medium">
+                  <motion.li 
+                    key={idx} 
+                    initial={{ opacity: 0, x: 10 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true, margin: "-20px" }}
+                    transition={{ duration: 0.3, delay: idx * 0.05 }}
+                    className="flex items-start gap-2 text-xs text-white/80 font-medium"
+                  >
                     <CheckCircle2 size={14} className="text-emerald-400 shrink-0 mt-0.5" />
                     <span>{text}</span>
-                  </li>
+                  </motion.li>
                 ))}
               </ul>
             </div>
@@ -589,6 +664,8 @@ export default function AboutVertus({
         </section>
 
         {/* SEÇÃO 11 — BENEFÍCIOS CONCRETOS */}
+        <SectionDivider />
+
         <section className="bg-vertus-gray border border-white/10 rounded-3xl p-6 sm:p-8 space-y-6">
           <div className="text-center space-y-2 max-w-2xl mx-auto">
             <span className="text-[10px] font-black uppercase tracking-[0.25em] text-gold">Resultados de Gestão</span>
@@ -606,15 +683,24 @@ export default function AboutVertus({
               { label: "Segurança", desc: "Mais confiança para contratar, investir e planejar" },
               { label: "Tempo", desc: "Menos energia gasta apagando incêndios financeiros" }
             ].map((item, idx) => (
-              <div key={idx} className="p-4 bg-white/5 border border-white/10 rounded-xl text-center space-y-1 hover:border-gold/30 transition-all flex flex-col justify-between">
+              <motion.div 
+                key={idx} 
+                initial={{ opacity: 0, y: 15 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-20px" }}
+                transition={{ duration: 0.3, delay: idx * 0.04 }}
+                className="p-4 bg-white/5 border border-white/10 rounded-xl text-center space-y-1 hover:border-gold/30 transition-all flex flex-col justify-between"
+              >
                 <p className="text-xs font-bold text-white uppercase tracking-tight">{item.label}</p>
                 <p className="text-[10px] text-white/50 leading-tight">{item.desc}</p>
-              </div>
+              </motion.div>
             ))}
           </div>
         </section>
 
         {/* SEÇÃO 12 — CONEXÃO DIRETA COM O DIAGNÓSTICO */}
+        <SectionDivider />
+
         <section className="bg-gradient-to-r from-gold/15 via-gold/5 to-transparent border border-gold/30 rounded-3xl p-6 sm:p-8 space-y-4">
           <div className="space-y-2 max-w-3xl">
             <span className="text-[10px] font-black text-gold uppercase tracking-[0.25em]">Continuidade Natural</span>
@@ -631,6 +717,7 @@ export default function AboutVertus({
         </section>
 
         {/* SEÇÃO 13 — ENCERRAMENTO E CTA */}
+        <SectionDivider />
         <section className="relative bg-gradient-to-br from-gold/15 via-gold/5 to-transparent border border-gold/30 rounded-3xl p-8 sm:p-12 text-center space-y-6 shadow-2xl">
           <div className="space-y-3 max-w-2xl mx-auto">
             <h2 className="text-2xl sm:text-3xl font-black text-white uppercase tracking-tight leading-snug">
