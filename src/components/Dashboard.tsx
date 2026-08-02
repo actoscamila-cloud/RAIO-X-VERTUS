@@ -63,6 +63,34 @@ const DIMENSION_DESCRIPTIONS: Record<keyof DiagnosisResponse["dimensions"], stri
   processos: "Governança financeira e rotinas estruturadas para tomada de decisão.",
 };
 
+// Micro-interaction Animated Counter Component
+function AnimatedNumber({ value, duration = 1200, formatter }: { value: number; duration?: number; formatter?: (val: number) => string }) {
+  const [current, setCurrent] = useState(0);
+
+  useEffect(() => {
+    let startTime: number | null = null;
+    let animationFrameId: number;
+
+    const animate = (timestamp: number) => {
+      if (!startTime) startTime = timestamp;
+      const progress = Math.min((timestamp - startTime) / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      setCurrent(Math.floor(eased * value));
+
+      if (progress < 1) {
+        animationFrameId = requestAnimationFrame(animate);
+      } else {
+        setCurrent(value);
+      }
+    };
+
+    animationFrameId = requestAnimationFrame(animate);
+    return () => cancelAnimationFrame(animationFrameId);
+  }, [value, duration]);
+
+  return <>{formatter ? formatter(current) : current.toLocaleString("pt-BR")}</>;
+}
+
 export default function Dashboard({ diagnosis, lead, onNext, isTrainingComplete, onOpenAboutVertus }: DashboardProps) {
   const dashboardRef = useRef<HTMLDivElement>(null);
   
@@ -108,13 +136,16 @@ export default function Dashboard({ diagnosis, lead, onNext, isTrainingComplete,
     fullMark: 100,
   }));
 
-  // Classification info
+  // Maturity classification info with score tier colors
   const getMaturityInfo = () => {
-    if (diagnosis.score >= 75) {
+    if (diagnosis.score >= 80) {
       return {
-        label: "Maturidade Financeira Estruturada",
-        badgeBg: "bg-emerald-500/10 border-emerald-500/30 text-emerald-400",
-        desc: `${company} já possui bases consolidadas. O foco agora é otimização contínua de margem e expansão acelerada com previsibilidade.`,
+        label: "Maturidade Financeira Excelente",
+        badgeBg: "bg-emerald-500/15 border-emerald-500/40 text-emerald-400",
+        scoreColor: "text-emerald-400",
+        scoreBorder: "border-emerald-500/30",
+        scoreGlow: "shadow-[0_0_30px_rgba(16,185,129,0.15)]",
+        desc: `${company} possui bases de governança consolidadas. O foco agora é otimização contínua de margem e expansão acelerada com previsibilidade.`,
         riskLevel: "Baixo",
         riskColor: "text-emerald-400 bg-emerald-500/10 border-emerald-500/20",
         predictability: "Alta",
@@ -123,11 +154,14 @@ export default function Dashboard({ diagnosis, lead, onNext, isTrainingComplete,
         decision: "Orientada a Dados",
       };
     }
-    if (diagnosis.score >= 45) {
+    if (diagnosis.score >= 60) {
       return {
         label: "Maturidade Financeira Intermediária",
-        badgeBg: "bg-gold/15 border-gold/30 text-gold",
-        desc: `${company} já possui bases importantes, porém ainda apresenta falhas que comprometem a previsibilidade financeira e o crescimento sustentável.`,
+        badgeBg: "bg-gold/15 border-gold/40 text-gold",
+        scoreColor: "text-gold",
+        scoreBorder: "border-gold/30",
+        scoreGlow: "shadow-[0_0_30px_rgba(212,175,55,0.15)]",
+        desc: `${company} já possui bases importantes, porém ainda apresenta falhas de processo que comprometem a previsibilidade e o crescimento sustentável.`,
         riskLevel: "Médio",
         riskColor: "text-gold bg-gold/10 border-gold/20",
         predictability: "Intermediária",
@@ -136,16 +170,35 @@ export default function Dashboard({ diagnosis, lead, onNext, isTrainingComplete,
         decision: "Mista (Sensação + Dados)",
       };
     }
+    if (diagnosis.score >= 40) {
+      return {
+        label: "Maturidade Financeira em Desenvolvimento",
+        badgeBg: "bg-amber-500/15 border-amber-500/40 text-amber-400",
+        scoreColor: "text-amber-400",
+        scoreBorder: "border-amber-500/30",
+        scoreGlow: "shadow-[0_0_30px_rgba(245,158,11,0.15)]",
+        desc: `${company} necessita de melhorias relevantes. A ausência de rotinas financeiras diárias gera vulnerabilidades diretas no fluxo de caixa.`,
+        riskLevel: "Elevado",
+        riskColor: "text-amber-400 bg-amber-500/10 border-amber-500/20",
+        predictability: "Baixa",
+        predictabilityColor: "text-amber-400",
+        control: "Instável",
+        decision: "Sensação / Intuição",
+      };
+    }
     return {
-      label: "Maturidade Financeira Inicial / Crítica",
-      badgeBg: "bg-amber-500/15 border-amber-500/30 text-amber-400",
-      desc: `${company} opera sob risco elevado de caixa por ausência de processos estruturados. Há necessidade urgente de estancar vazamentos operacionais.`,
-      riskLevel: "Alto",
-      riskColor: "text-amber-400 bg-amber-500/10 border-amber-500/20",
-      predictability: "Baixa",
-      predictabilityColor: "text-amber-400",
+      label: "Maturidade Financeira Crítica",
+      badgeBg: "bg-rose-500/15 border-rose-500/40 text-rose-400",
+      scoreColor: "text-rose-400",
+      scoreBorder: "border-rose-500/30",
+      scoreGlow: "shadow-[0_0_30px_rgba(244,63,94,0.15)]",
+      desc: `${company} opera sob risco elevado por ausência de controles formais. Há urgência na estancagem de vazamentos de caixa.`,
+      riskLevel: "Crítico",
+      riskColor: "text-rose-400 bg-rose-500/10 border-rose-500/20",
+      predictability: "Muito Baixa",
+      predictabilityColor: "text-rose-400",
       control: "Frágil",
-      decision: "Limitada (Reativa)",
+      decision: "Reativa",
     };
   };
 
@@ -157,24 +210,24 @@ export default function Dashboard({ diagnosis, lead, onNext, isTrainingComplete,
       setChatMessages([
         {
           role: "model",
-          text: `Com certeza, **${firstname}**! Como **Assistente Financeiro Vertus**, meu papel é garantir que você não apenas registre números, mas tenha uma ferramenta de inteligência prática para tomada de decisão em **${company}** — seja você cliente da Vertus ou não.
+          text: `Olá **${firstname}**! Analisando especificamente os dados da **${company}** e o resultado do seu diagnóstico, identificamos que você tem uma operação com excelente potencial, mas que hoje sofre com gargalos de previsibilidade de caixa. Como **Mentora Financeira Vertus**, meu papel é te orientar com soluções práticas para estruturar suas finanças — seja você cliente da Vertus ou não.
 
-Um fluxo de caixa eficiente não é apenas uma lista de gastos; é uma **ferramenta de previsibilidade**. Para estruturarmos e organizarmos as finanças da **${company}** com clareza, recomendo seguir este roteiro estratégico da **Metodologia Vertus**:
+Um fluxo de caixa eficiente não é apenas um registro de contas; é uma **ferramenta de inteligência e decisão**. Para organizarmos a **${company}** com total clareza, recomendo seguir este roteiro estratégico da **Metodologia Vertus**:
 
 **1. Categorização Inteligente (Plano de Contas)**
-Não misture receitas e despesas. O segredo é a **segregação absoluta**. Organize seu fluxo em três blocos fundamentais:
-- **Entradas**: Receitas provenientes de vendas ou serviços prestados.
-- **Saídas Operacionais**: Custos fixos (aluguel, salários) e variáveis (matéria-prima, insumos).
-- **Saídas Não Operacionais**: Investimentos, retiradas de sócios ou pagamentos de empréstimos.
-*Dica de Ouro*: Ao separar corretamente, você identifica de imediato quais saídas desnecessárias contribuem para o desperdício estimado de R$ ${diagnosis.monthlyLoss.toLocaleString("pt-BR")} mensais.
+A regra de ouro é a **segregação absoluta**. Organize seu fluxo em três blocos bem definidos:
+- **Entradas Operacionais**: Receitas das vendas e serviços prestados.
+- **Saídas Operacionais**: Custos fixos (aluguel, equipe) e variáveis (matéria-prima, insumos).
+- **Saídas Não Operacionais**: Investimentos, amortização de dívidas e retiradas dos sócios.
+*Dica Prática*: Essa separação expõe na hora as saídas desnecessárias que geram o desperdício estimado de **R$ ${diagnosis.monthlyLoss.toLocaleString("pt-BR")}/mês**.
 
 **2. Conciliação Diária: O Coração do Controle**
-O erro de muitos gestores é conciliar o caixa uma vez por semana ou por mês. Para a **${company}**, adote a **conciliação diária**. Isso garante que todo centavo que entrou ou saiu da conta bancária esteja espelhado no seu controle em até 24 horas.
+Não espere o fim do mês. Adote a **conciliação diária** para garantir que cada centavo movimentado no banco esteja 100% verificado e sem pendências em até 24 horas.
 
 **3. O DFC Projetado (30/60/90 Dias)**
-O fluxo de caixa histórico (o que já aconteceu) serve para análise. O que salva a empresa é o **DFC Projetado**. Mapeie antecipadamente seus compromissos futuros para tomar decisões com total segurança.
+Enquanto o caixa passado analisa o histórico, o **DFC Projetado** mapeia o futuro para você antecipar decisões com tranquilidade.
 
-Estou aqui para tirar qualquer dúvida financeira e te orientar passo a passo. Como posso te ajudar agora?`
+Hoje, a **${company}** já possui algum desses três pilares estruturados na rotina financeira?`
         }
       ]);
     }
@@ -233,13 +286,21 @@ Estou aqui para tirar qualquer dúvida financeira e te orientar passo a passo. C
 
       const ai = new GoogleGenAI({ apiKey });
 
-      const systemInstruction = `Você é a Mentora Vertus IA, uma consultora e mentora de inteligência financeira próxima, altamente didática e estratégica.
+      const systemInstruction = `Você é a Mentora Vertus IA, uma consultora e mentora de inteligência financeira humana, extremamente didática, atenciosa e estratégica.
 
 SEU OBJETIVO E TOM DE VOZ:
 - Seu papel é ser uma mentora prática de finanças empresariais para ${firstname}, responsável pela ${company}.
 - Você DEVE responder dúvidas, orientar, ensinar e estruturar roteiros práticos sobre gestão financeira (fluxo de caixa, conciliação diária, DRE gerencial, precificação, margens, capital de giro, ponto de equilíbrio).
-- NUNCA tente vender serviços da Vertus, NUNCA seja comercial ou apelativa, e NUNCA aja como vendedora de BPO. O atendimento é 100% focado na orientação e mentoria gratuita do empresário, indiferente se ele é cliente ou não.
-- Converse com um tom caloroso, próximo, profissional e encorajador, como um verdadeiro braço direito estratégico do empresário.
+- NUNCA tente vender serviços da Vertus, NUNCA seja comercial ou apelativa, e NUNCA aja como vendedora de BPO. O atendimento é 100% focado na orientação e mentoria do empresário, indiferente se ele é cliente ou não.
+- Converse com tom humano, acolhedor, profissional e encorajador, como um verdadeiro braço direito estratégico do empresário.
+
+DIRETRIZES DE HUMANIZAÇÃO E LINGUAGEM CONSULTIVA:
+1. Inicie SEMPRE sua resposta contextualizando o cenário real da empresa, por exemplo:
+   "Analisando especificamente os dados da ${company} e o comportamento identificado no seu diagnóstico..."
+   ou "Pelo cenário mapeado para a ${company}..."
+2. Desenvolva a orientação técnica de forma didática e em passos claros.
+3. Conclua SEMPRE sua resposta com uma pergunta consultiva que estimule a reflexão do empresário sobre sua rotina, por exemplo:
+   "Hoje isso já acontece na sua rotina na ${company}?" ou "Esse cenário faz sentido para a realidade atual do seu negócio?"
 
 CONTEXTO DO DIAGNÓSTICO DA EMPRESA ${company}:
 - Score Vertus: ${diagnosis.score}/100 (${maturity.label})
@@ -253,14 +314,13 @@ ${settings?.aiPrompt || "Você é o Assistente Financeiro Vertus, um consultor e
 ${settings?.financialContent || "Foco em fluxo de caixa, DRE gerencial, precificação, margem e conciliação bancária diária."}
 ${settings?.strategicGuidelines || "Foco em clareza, previsibilidade e tomada de decisão embasada em dados."}
 
-DIRETRIZES RIGOROSAS DE FORMATAÇÃO (ESTILO MENTORA):
-1. Apresente-se sempre como **Assistente Financeiro Vertus** ou **Mentora Financeira Vertus**.
-2. Trate sempre pelo nome (${firstname}) e cite a empresa (${company}).
-3. Responda com clareza, objetividade e riqueza de conhecimento prático sem enrolação ou linguagem formal engessada.
-4. Formate suas respostas em Markdown rico:
-   - Destaque em **negrito** os termos-chave, conceitos estratégicos e valores importantes (ex: **Assistente Financeiro Vertus**, **ferramenta de previsibilidade**, **segregação absoluta**, **R$ ${diagnosis.monthlyLoss.toLocaleString("pt-BR")}**).
-   - Use títulos numerados bem destacados (ex: **1. Categorização Inteligente (Plano de Contas)** ou **2. Conciliação Diária: O Coração do Controle**) para estruturar guias e passos práticos.
-   - Use marcadores e tópicos curtos para fácil visualização e aplicação imediata no negócio.`;
+DIRETRIZES RIGOROSAS DE FORMATAÇÃO:
+- Apresente-se como **Mentora Financeira Vertus** ou **Assistente Financeiro Vertus**.
+- Trate sempre pelo nome (${firstname}) e cite a empresa (${company}).
+- Formate suas respostas em Markdown rico:
+  * Destaque em **negrito** os termos-chave, conceitos estratégicos e valores importantes.
+  * Use títulos numerados destacados para estruturar passos práticos.
+  * Mantenha parágrafos curtos, bem organizados e fáceis de ler.`;
 
       // Build history for multi-turn chat
       const chatHistory = chatMessages.map((m) => ({
@@ -303,7 +363,7 @@ DIRETRIZES RIGOROSAS DE FORMATAÇÃO (ESTILO MENTORA):
         ...prev,
         {
           role: "model",
-          text: `Com certeza, **${firstname}**. Como **Assistente Financeiro Vertus**, meu papel é garantir que você não apenas registre números, mas tenha uma ferramenta de inteligência para tomada de decisão em **${company}**.\n\nUm fluxo de caixa eficiente não é apenas uma lista de gastos; é uma **ferramenta de previsibilidade**. Para montá-lo com clareza, vamos estruturá-lo em quatro pilares fundamentais:\n\n**1. A Estrutura Básica**\nSegregação total entre as contas da empresa e as pessoais dos sócios.\n\n**2. Conciliação Bancária Diária**\nRegistrar e checar cada centavo que entra e sai do banco todos os dias sem pendências.\n\n**3. Categorização por Centro de Custo**\nDividir saídas por categoria operacional e despesas variáveis para enxergar a margem real.\n\n**4. Projeção de Caixa (DFC 30/60/90 Dias)**\nAnalisar o futuro do caixa com antecedência para tomar decisões com total segurança.`,
+          text: `Analisando especificamente os dados da **${company}**, entendo perfeitamente o seu desafio. Como **Mentora Financeira Vertus**, meu papel é te orientar para transformar o fluxo de caixa em uma ferramenta de clareza real.\n\nPara organizarmos as finanças da **${company}**, recomendo focarmos em quatro etapas fundamentais:\n\n**1. A Estrutura Básica**\nSegregação total entre as contas da empresa e as despesas pessoais dos sócios.\n\n**2. Conciliação Bancária Diária**\nRegistrar e conferir cada centavo no banco diariamente sem deixar acúmulos.\n\n**3. Categorização por Centro de Custo**\nDividir saídas entre custos fixos e despesas variáveis para enxergar a margem real.\n\n**4. Projeção de Caixa (DFC 30/60/90 Dias)**\nAnalisar os compromissos futuros com antecedência para tomar decisões com total segurança.\n\nHoje essa rotina de conciliação diária já acontece no dia a dia da **${company}**?`,
         },
       ]);
     } finally {
@@ -380,7 +440,7 @@ DIRETRIZES RIGOROSAS DE FORMATAÇÃO (ESTILO MENTORA):
 
               <button
                 onClick={() => setIsConsolidating(false)}
-                className="text-[10px] font-black text-white/40 hover:text-gold uppercase tracking-widest transition-colors"
+                className="text-[10px] font-black text-white/40 hover:text-gold uppercase tracking-widest transition-colors cursor-pointer"
               >
                 Pular Animação →
               </button>
@@ -388,6 +448,26 @@ DIRETRIZES RIGOROSAS DE FORMATAÇÃO (ESTILO MENTORA):
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* SENSAÇÃO DE CONQUISTA AO FINALIZAR O DIAGNÓSTICO */}
+      <motion.div 
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="bg-emerald-500/10 border border-emerald-500/30 rounded-2xl px-4 sm:px-5 py-3.5 flex items-center justify-between gap-3 text-xs text-emerald-300 font-medium shadow-lg shadow-emerald-500/5"
+      >
+        <div className="flex items-center gap-3">
+          <div className="w-7 h-7 rounded-full bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center shrink-0 text-emerald-400">
+            <CheckCircle2 size={16} />
+          </div>
+          <p className="leading-snug text-xs sm:text-sm">
+            <strong className="text-white font-black uppercase tracking-wide">✓ Diagnóstico concluído com sucesso.</strong>{" "}
+            <span className="text-emerald-200/90 font-sans">Seu Painel Executivo foi gerado utilizando a metodologia de análise financeira Vertus para <strong className="text-white underline decoration-emerald-500/50">{company}</strong>.</span>
+          </p>
+        </div>
+        <span className="hidden md:inline-block px-2.5 py-1 bg-emerald-500/20 border border-emerald-500/40 rounded-lg text-[10px] font-black text-emerald-300 uppercase tracking-widest shrink-0">
+          Relatório Ativo
+        </span>
+      </motion.div>
 
       {/* HEADER & PERSONALIZED GREETING */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-4 border-b border-white/10 pb-6">
@@ -410,34 +490,36 @@ DIRETRIZES RIGOROSAS DE FORMATAÇÃO (ESTILO MENTORA):
         <button
           onClick={handleExport}
           disabled={isExporting}
-          className="px-5 py-2.5 bg-white/5 hover:bg-white/10 border border-white/15 text-white rounded-xl text-xs font-black uppercase tracking-widest transition-all flex items-center gap-2 shrink-0"
+          className="px-5 py-2.5 bg-white/5 hover:bg-white/10 border border-white/15 text-white rounded-xl text-xs font-black uppercase tracking-widest transition-all flex items-center gap-2 shrink-0 shadow-md hover:border-gold/30 cursor-pointer"
         >
           {isExporting ? <RefreshCw size={14} className="animate-spin" /> : <Download size={14} />}
           Exportar Relatório PDF
         </button>
       </div>
 
-      {/* 2. HERO DO RESULTADO — INTERPRETAÇÃO PRIMEIRO */}
+      {/* 2. HERO DO RESULTADO — HEADLINE DOMINANTE & HIERARQUIA VISUAL CLARA */}
       <motion.div
         initial={{ opacity: 0, y: 15 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-gradient-to-br from-gold/15 via-vertus-gray to-vertus-black border-2 border-gold/40 rounded-3xl p-6 sm:p-8 space-y-4 shadow-2xl relative overflow-hidden"
+        className="bg-gradient-to-br from-gold/20 via-vertus-gray to-vertus-black border-2 border-gold/40 rounded-3xl p-6 sm:p-10 space-y-6 shadow-[0_0_40px_rgba(212,175,55,0.12)] relative overflow-hidden"
       >
-        <div className="absolute top-0 right-0 w-64 h-64 bg-gold/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute top-0 right-0 w-80 h-80 bg-gold/10 rounded-full blur-3xl pointer-events-none" />
 
         <div className="flex items-center gap-2">
-          <span className="px-3 py-1 bg-gold text-vertus-black rounded-lg text-[9px] font-black uppercase tracking-widest">
+          <span className="px-3 py-1 bg-gold text-vertus-black rounded-lg text-[9px] font-black uppercase tracking-widest shadow-sm">
             Diagnóstico Concluído
           </span>
           <span className="text-[10px] text-white/40 font-mono">ID: #{lead.id?.slice(0, 8) || "VT-2026"}</span>
         </div>
 
-        <h2 className="text-xl sm:text-2xl lg:text-3xl font-black text-white uppercase tracking-tight leading-snug max-w-3xl">
-          {firstname}, identificamos uma empresa com alto potencial de crescimento em <span className="text-gold">{company}</span>.
+        {/* Headline DOMINANTE */}
+        <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-white uppercase tracking-tight leading-snug max-w-4xl">
+          {firstname}, identificamos uma empresa com alto potencial de crescimento em <span className="text-gold underline decoration-gold/40 underline-offset-8">{company}</span>.
           <br className="hidden sm:inline" /> Mas hoje sua estrutura financeira limita parte desse resultado.
         </h2>
 
-        <p className="text-xs sm:text-sm text-white/80 leading-relaxed max-w-3xl font-sans">
+        {/* Resumo do Cenário Antes dos Indicadores */}
+        <p className="text-xs sm:text-base text-white/80 leading-relaxed max-w-3xl font-sans border-l-2 border-gold/50 pl-4 py-0.5">
           Após analisar detalhadamente todas as respostas da <strong className="text-white">{company}</strong>, identificamos oportunidades estratégicas decisivas para aumentar a previsibilidade, estancar perdas invisíveis e dar total segurança à tomada de decisão. A boa notícia é que esses gargalos são mapeados e resolvidos através de rotinas e método.
         </p>
       </motion.div>
@@ -452,7 +534,7 @@ DIRETRIZES RIGOROSAS DE FORMATAÇÃO (ESTILO MENTORA):
         </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
-          <div className="bg-vertus-gray border border-white/10 rounded-2xl p-4 space-y-1 hover:border-gold/30 transition-all">
+          <div className="bg-vertus-gray border border-white/10 rounded-2xl p-4 space-y-1 hover:border-gold/30 transition-all shadow-md">
             <p className="text-[9px] font-black uppercase text-white/40 tracking-widest">Nível de Risco</p>
             <p className={cn("text-xs font-black uppercase tracking-wider px-2 py-1 rounded-lg border inline-block", maturity.riskColor)}>
               {maturity.riskLevel}
@@ -460,7 +542,7 @@ DIRETRIZES RIGOROSAS DE FORMATAÇÃO (ESTILO MENTORA):
             <p className="text-[9px] text-white/30 pt-1">Exposição do Caixa</p>
           </div>
 
-          <div className="bg-vertus-gray border border-white/10 rounded-2xl p-4 space-y-1 hover:border-gold/30 transition-all">
+          <div className="bg-vertus-gray border border-white/10 rounded-2xl p-4 space-y-1 hover:border-gold/30 transition-all shadow-md">
             <p className="text-[9px] font-black uppercase text-white/40 tracking-widest">Previsibilidade</p>
             <p className={cn("text-sm font-black uppercase tracking-tight", maturity.predictabilityColor)}>
               {maturity.predictability}
@@ -468,7 +550,7 @@ DIRETRIZES RIGOROSAS DE FORMATAÇÃO (ESTILO MENTORA):
             <p className="text-[9px] text-white/30 pt-1">Projeção 30/60/90d</p>
           </div>
 
-          <div className="bg-vertus-gray border border-white/10 rounded-2xl p-4 space-y-1 hover:border-gold/30 transition-all">
+          <div className="bg-vertus-gray border border-white/10 rounded-2xl p-4 space-y-1 hover:border-gold/30 transition-all shadow-md">
             <p className="text-[9px] font-black uppercase text-white/40 tracking-widest">Controle Financeiro</p>
             <p className="text-sm font-black uppercase text-white">
               {maturity.control}
@@ -476,7 +558,7 @@ DIRETRIZES RIGOROSAS DE FORMATAÇÃO (ESTILO MENTORA):
             <p className="text-[9px] text-white/30 pt-1">Conciliação Diária</p>
           </div>
 
-          <div className="bg-vertus-gray border border-white/10 rounded-2xl p-4 space-y-1 hover:border-gold/30 transition-all">
+          <div className="bg-vertus-gray border border-white/10 rounded-2xl p-4 space-y-1 hover:border-gold/30 transition-all shadow-md">
             <p className="text-[9px] font-black uppercase text-white/40 tracking-widest">Tomada de Decisão</p>
             <p className="text-xs font-bold text-white/90 leading-tight">
               {maturity.decision}
@@ -484,7 +566,7 @@ DIRETRIZES RIGOROSAS DE FORMATAÇÃO (ESTILO MENTORA):
             <p className="text-[9px] text-white/30 pt-1">Base nos Números</p>
           </div>
 
-          <div className="col-span-2 sm:col-span-1 bg-vertus-gray border border-emerald-500/20 rounded-2xl p-4 space-y-1 hover:border-emerald-500/40 transition-all">
+          <div className="col-span-2 sm:col-span-1 bg-vertus-gray border border-emerald-500/20 rounded-2xl p-4 space-y-1 hover:border-emerald-500/40 transition-all shadow-md">
             <p className="text-[9px] font-black uppercase text-emerald-400 tracking-widest">Potencial Evolutivo</p>
             <p className="text-sm font-black uppercase text-emerald-400 flex items-center gap-1">
               <TrendingUp size={14} /> Alto
@@ -496,15 +578,20 @@ DIRETRIZES RIGOROSAS DE FORMATAÇÃO (ESTILO MENTORA):
 
       {/* 4. ÍNDICE VERTUS + HEMORRAGIA FINANCEIRA GRID */}
       <div className="grid lg:grid-cols-12 gap-6">
-        {/* ÍNDICE VERTUS CARD (5 cols) */}
+        {/* ÍNDICE VERTUS CARD (5 cols) COM REFORÇO VISUAL DE FAXA DE MATURIDADE */}
         <motion.div
           initial={{ opacity: 0, x: -15 }}
           animate={{ opacity: 1, x: 0 }}
-          className="lg:col-span-5 bg-vertus-gray border border-white/10 rounded-3xl p-6 sm:p-8 space-y-6 flex flex-col justify-between shadow-xl relative overflow-hidden"
+          className={cn(
+            "lg:col-span-5 bg-gradient-to-br border rounded-3xl p-6 sm:p-8 space-y-6 flex flex-col justify-between shadow-2xl relative overflow-hidden transition-all duration-500",
+            maturity.scoreBorder,
+            maturity.scoreGlow,
+            "from-vertus-gray via-black to-vertus-black"
+          )}
         >
           <div className="space-y-4">
             <div className="flex justify-between items-center">
-              <span className="text-[10px] font-black text-gold uppercase tracking-[0.2em] bg-gold/10 border border-gold/20 px-3 py-1 rounded-full">
+              <span className={cn("text-[10px] font-black uppercase tracking-[0.2em] px-3 py-1 rounded-full border", maturity.badgeBg)}>
                 Índice Vertus
               </span>
               <span className="text-[10px] text-white/40 font-mono">0 a 100 PONTOS</span>
@@ -512,15 +599,17 @@ DIRETRIZES RIGOROSAS DE FORMATAÇÃO (ESTILO MENTORA):
 
             <div className="space-y-1 text-center sm:text-left">
               <div className="flex items-baseline justify-center sm:justify-start gap-2">
-                <span className="text-5xl sm:text-6xl font-black text-white tracking-tight">{diagnosis.score}</span>
-                <span className="text-xl font-bold text-gold">/ 100 pts</span>
+                <span className={cn("text-5xl sm:text-6xl font-black tracking-tight", maturity.scoreColor)}>
+                  <AnimatedNumber value={diagnosis.score} />
+                </span>
+                <span className="text-xl font-bold text-white/40">/ 100 pts</span>
               </div>
               <div className={cn("inline-block px-3 py-1 rounded-xl text-xs font-black uppercase tracking-wider border", maturity.badgeBg)}>
                 {maturity.label}
               </div>
             </div>
 
-            <p className="text-xs text-white/60 leading-relaxed font-sans">
+            <p className="text-xs text-white/70 leading-relaxed font-sans">
               {maturity.desc}
             </p>
           </div>
@@ -534,38 +623,37 @@ DIRETRIZES RIGOROSAS DE FORMATAÇÃO (ESTILO MENTORA):
 
             <div className="relative w-full bg-black/60 h-4 rounded-full p-0.5 border border-white/10 overflow-hidden">
               <div
-                className="h-full rounded-full bg-gradient-to-r from-amber-500 via-gold to-emerald-400 transition-all duration-1000 shadow-lg shadow-gold/20"
+                className="h-full rounded-full bg-gradient-to-r from-rose-500 via-amber-500 via-gold to-emerald-400 transition-all duration-1000 shadow-lg"
                 style={{ width: `${Math.max(10, diagnosis.score)}%` }}
               />
             </div>
 
-            {/* Benchmark ticks */}
-            <div className="flex justify-between text-[9px] font-mono text-white/30 px-1">
-              <span>0</span>
-              <span>25</span>
-              <span>50</span>
-              <span>75</span>
-              <span className="text-emerald-400 font-bold">100</span>
+            {/* Benchmark ticks colorized */}
+            <div className="flex justify-between text-[9px] font-mono px-1">
+              <span className="text-rose-400">0 (Crítico)</span>
+              <span className="text-amber-400">40</span>
+              <span className="text-gold">60</span>
+              <span className="text-emerald-400 font-bold">80 (Excelente)</span>
             </div>
 
-            <p className="text-[10px] text-white/40 text-center sm:text-left pt-1">
-              A <strong className="text-white">{company}</strong> está melhor posicionada que <span className="text-gold font-bold">{diagnosis.benchmark}%</span> das empresas do mesmo porte.
+            <p className="text-[10px] text-white/50 text-center sm:text-left pt-1">
+              A <strong className="text-white">{company}</strong> está melhor posicionada que <span className="text-gold font-bold">{diagnosis.benchmark}%</span> das empresas do mesmo segmento.
             </p>
           </div>
         </motion.div>
 
-        {/* HEMORRAGIA FINANCEIRA CARD (7 cols) */}
+        {/* HEMORRAGIA FINANCEIRA CARD TANGÍVEL (7 cols) */}
         <motion.div
           initial={{ opacity: 0, x: 15 }}
           animate={{ opacity: 1, x: 0 }}
-          className="lg:col-span-7 bg-gradient-to-br from-amber-950/30 via-vertus-gray to-vertus-black border border-amber-500/30 rounded-3xl p-6 sm:p-8 space-y-6 flex flex-col justify-between shadow-2xl relative overflow-hidden"
+          className="lg:col-span-7 bg-gradient-to-br from-amber-950/40 via-vertus-gray to-vertus-black border border-amber-500/40 rounded-3xl p-6 sm:p-8 space-y-6 flex flex-col justify-between shadow-2xl relative overflow-hidden"
         >
           <div className="space-y-4">
             <div className="flex justify-between items-center">
-              <span className="px-3 py-1 bg-amber-500/10 border border-amber-500/30 text-amber-400 rounded-full text-[9px] font-black uppercase tracking-[0.2em] flex items-center gap-1.5">
-                <AlertCircle size={12} /> Desperdício Operacional Estimado
+              <span className="px-3 py-1 bg-amber-500/15 border border-amber-500/40 text-amber-400 rounded-full text-[9px] font-black uppercase tracking-[0.2em] flex items-center gap-1.5">
+                <AlertCircle size={12} /> Oportunidade / Desperdício Estimado
               </span>
-              <span className="text-[10px] text-amber-400/60 font-bold uppercase tracking-widest">Alerta Estratégico</span>
+              <span className="text-[10px] text-amber-400/80 font-bold uppercase tracking-widest">Alerta de Caixa</span>
             </div>
 
             <div className="space-y-2">
@@ -574,61 +662,82 @@ DIRETRIZES RIGOROSAS DE FORMATAÇÃO (ESTILO MENTORA):
               </p>
               <div className="flex flex-wrap items-baseline gap-2">
                 <span className="text-3xl sm:text-5xl font-black text-amber-400 tracking-tight">
-                  R$ {diagnosis.monthlyLoss.toLocaleString("pt-BR")}
+                  R$ <AnimatedNumber value={diagnosis.monthlyLoss} />
                 </span>
                 <span className="text-sm font-bold text-white/60 uppercase tracking-widest">por mês</span>
               </div>
             </div>
 
-            <p className="text-xs text-white/70 leading-relaxed font-sans">
-              Esse valor representa oportunidades financeiras perdidas devido à ausência de organização, previsibilidade e processos estruturados em <strong className="text-white">{company}</strong>. Não significa prejuízo imediato obrigatório — significa potencial de lucro que hoje deixa de ser capturado.
+            <p className="text-xs sm:text-sm text-white/80 leading-relaxed font-sans">
+              Em apenas <strong className="text-amber-400">12 meses</strong>, esse desvio contínuo representa aproximadamente <strong className="text-amber-300 font-mono text-base">R$ {(diagnosis.monthlyLoss * 12).toLocaleString("pt-BR")}</strong> que deixam de fortalecer o caixa e a liquidez da <strong className="text-white">{company}</strong>.
             </p>
           </div>
 
-          {/* 12 MONTHS HIGHLIGHT BOX */}
-          <div className="p-4 bg-black/60 border border-amber-500/20 rounded-2xl flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
-            <div className="space-y-0.5">
-              <p className="text-[10px] font-black text-amber-400/80 uppercase tracking-widest">Impacto Estimado em 12 Meses</p>
-              <p className="text-xs text-white/60">Capital acumulado que poderia estar reinvestido ou distribuído aos sócios.</p>
+          {/* VISUAL CUMULATIVE LOSS TIMELINE STEPS */}
+          <div className="space-y-3 pt-3 border-t border-amber-500/20">
+            <p className="text-[10px] font-black uppercase text-amber-400/80 tracking-widest">
+              Evolução da Perda Acumulada Sem Correção de Processos:
+            </p>
+            <div className="grid grid-cols-3 gap-2 text-center">
+              <div className="bg-black/50 border border-amber-500/20 rounded-xl p-2.5 space-y-0.5">
+                <p className="text-[9px] text-white/40 font-bold uppercase">3 Meses</p>
+                <p className="text-xs font-black text-amber-400 font-mono">
+                  R$ <AnimatedNumber value={diagnosis.monthlyLoss * 3} />
+                </p>
+              </div>
+              <div className="bg-black/60 border border-amber-500/30 rounded-xl p-2.5 space-y-0.5">
+                <p className="text-[9px] text-white/40 font-bold uppercase">6 Meses</p>
+                <p className="text-xs font-black text-amber-400 font-mono">
+                  R$ <AnimatedNumber value={diagnosis.monthlyLoss * 6} />
+                </p>
+              </div>
+              <div className="bg-amber-500/10 border border-amber-500/40 rounded-xl p-2.5 space-y-0.5 shadow-md">
+                <p className="text-[9px] text-amber-300 font-bold uppercase">12 Meses (Total)</p>
+                <p className="text-sm font-black text-amber-400 font-mono">
+                  R$ <AnimatedNumber value={diagnosis.monthlyLoss * 12} />
+                </p>
+              </div>
             </div>
-            <span className="text-xl font-black text-amber-400 font-mono tracking-tight shrink-0 bg-amber-500/10 border border-amber-500/30 px-3.5 py-1.5 rounded-xl">
-              R$ {(diagnosis.monthlyLoss * 12).toLocaleString("pt-BR")}
-            </span>
           </div>
         </motion.div>
       </div>
 
-      {/* 5. RADAR DE MATURIDADE INTELIGENTE */}
-      <div className="bg-vertus-gray border border-white/10 rounded-3xl p-6 sm:p-8 space-y-6 shadow-xl">
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+      {/* 5. RADAR DE MATURIDADE PROTAGONISTA & ANALÍTICO */}
+      <div className="bg-vertus-gray border border-white/15 rounded-3xl p-6 sm:p-8 space-y-6 shadow-2xl relative overflow-hidden">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b border-white/10 pb-4">
           <div>
-            <span className="text-[10px] font-black text-gold uppercase tracking-[0.2em]">Visão 360º Operacional</span>
-            <h3 className="text-lg sm:text-xl font-black text-white uppercase tracking-tight">Radar de Maturidade por Pilar</h3>
+            <span className="text-[10px] font-black text-gold uppercase tracking-[0.2em] bg-gold/10 px-3 py-1 rounded-full border border-gold/20">
+              Coração Analítico • Visão 360º Operacional
+            </span>
+            <h3 className="text-xl sm:text-2xl font-black text-white uppercase tracking-tight pt-2">
+              Radar de Maturidade Financeira por Pilar
+            </h3>
           </div>
-          <div className="flex items-center gap-2 text-[10px] font-bold text-white/50 bg-black/40 px-3 py-1.5 rounded-xl border border-white/10">
-            <div className="w-2 h-2 rounded-full bg-gold" />
-            Desempenho da {company}
+          <div className="flex items-center gap-2 text-[10px] font-bold text-gold bg-black/60 px-3.5 py-2 rounded-xl border border-gold/30 shadow-md">
+            <div className="w-2.5 h-2.5 rounded-full bg-gold animate-pulse" />
+            Desempenho Atual da {company}
           </div>
         </div>
 
-        <div className="grid lg:grid-cols-12 gap-6 items-center">
-          {/* Radar Chart Component (7 cols) */}
-          <div className="lg:col-span-7 h-[280px] sm:h-[340px] w-full bg-black/30 border border-white/5 rounded-2xl p-2 relative">
+        <div className="grid lg:grid-cols-12 gap-8 items-center">
+          {/* Radar Chart Component (7 cols) - ENLARGED AREA & HIGH CONTRAST */}
+          <div className="lg:col-span-7 h-[340px] sm:h-[400px] w-full bg-black/60 border border-gold/20 rounded-2xl p-4 relative shadow-inner">
             <ResponsiveContainer width="100%" height="100%">
-              <RadarChart cx="50%" cy="50%" outerRadius="70%" data={radarData}>
-                <PolarGrid stroke="rgba(255,255,255,0.08)" />
+              <RadarChart cx="50%" cy="50%" outerRadius="75%" data={radarData}>
+                <PolarGrid stroke="rgba(212, 175, 55, 0.25)" />
                 <PolarAngleAxis
                   dataKey="subject"
-                  tick={{ fill: "rgba(255,255,255,0.7)", fontSize: 10, fontWeight: 700 }}
+                  tick={{ fill: "#FFFFFF", fontSize: 11, fontWeight: 700 }}
                 />
                 <PolarRadiusAxis angle={30} domain={[0, 100]} tick={false} axisLine={false} />
                 <Radar
                   name="Sua Empresa"
                   dataKey="A"
-                  stroke="#D4AF77"
-                  fill="#D4AF77"
-                  fillOpacity={0.35}
-                  animationDuration={1200}
+                  stroke="#D4AF37"
+                  strokeWidth={2.5}
+                  fill="#D4AF37"
+                  fillOpacity={0.45}
+                  animationDuration={1400}
                 />
               </RadarChart>
             </ResponsiveContainer>
@@ -637,27 +746,27 @@ DIRETRIZES RIGOROSAS DE FORMATAÇÃO (ESTILO MENTORA):
           {/* Highlights & Dimension Details (5 cols) */}
           <div className="lg:col-span-5 space-y-4">
             {/* Maior Ponto Forte */}
-            <div className="p-4 bg-emerald-500/10 border border-emerald-500/20 rounded-2xl space-y-1">
+            <div className="p-4 bg-emerald-500/10 border border-emerald-500/30 rounded-2xl space-y-1 shadow-md">
               <div className="flex items-center gap-2 text-emerald-400 text-xs font-black uppercase tracking-wider">
                 <CheckCircle2 size={16} /> Maior Maturidade Atual
               </div>
-              <p className="text-sm font-black text-white">{highestDimension.name}</p>
-              <p className="text-[11px] text-white/60 font-mono">Pontuação: {highestDimension.score} / 100 pts</p>
+              <p className="text-base font-black text-white">{highestDimension.name}</p>
+              <p className="text-xs text-white/70 font-mono">Pontuação: <strong className="text-emerald-400">{highestDimension.score} / 100 pts</strong></p>
             </div>
 
             {/* Maior Oportunidade */}
-            <div className="p-4 bg-amber-500/10 border border-amber-500/20 rounded-2xl space-y-1">
+            <div className="p-4 bg-amber-500/10 border border-amber-500/30 rounded-2xl space-y-1 shadow-md">
               <div className="flex items-center gap-2 text-amber-400 text-xs font-black uppercase tracking-wider">
                 <AlertCircle size={16} /> Maior Oportunidade de Ganho
               </div>
-              <p className="text-sm font-black text-white">{lowestDimension.name}</p>
-              <p className="text-[11px] text-white/60 font-mono">Pontuação: {lowestDimension.score} / 100 pts</p>
+              <p className="text-base font-black text-white">{lowestDimension.name}</p>
+              <p className="text-xs text-white/70 font-mono">Pontuação: <strong className="text-amber-400">{lowestDimension.score} / 100 pts</strong></p>
             </div>
 
             {/* Interactive Dimension Hover Explanation */}
-            <div className="p-4 bg-black/40 border border-white/10 rounded-2xl space-y-2">
+            <div className="p-4 bg-black/60 border border-white/10 rounded-2xl space-y-2">
               <p className="text-[10px] font-black text-white/40 uppercase tracking-widest">
-                Detalhamento dos Pilares
+                Selecione um Pilar para Detalhar:
               </p>
               <div className="grid grid-cols-2 gap-1.5">
                 {Object.entries(diagnosis.dimensions).map(([key, val]) => (
@@ -666,9 +775,9 @@ DIRETRIZES RIGOROSAS DE FORMATAÇÃO (ESTILO MENTORA):
                     onMouseEnter={() => setHoveredDimension(key as any)}
                     onClick={() => setHoveredDimension(key as any)}
                     className={cn(
-                      "p-2 rounded-lg border text-left transition-all text-[10px] font-bold flex justify-between items-center",
+                      "p-2 rounded-lg border text-left transition-all text-[10px] font-bold flex justify-between items-center cursor-pointer",
                       hoveredDimension === key
-                        ? "bg-gold/20 border-gold text-gold"
+                        ? "bg-gold/25 border-gold text-gold shadow-md"
                         : "bg-white/5 border-white/5 text-white/70 hover:border-white/20"
                     )}
                   >
@@ -740,29 +849,29 @@ DIRETRIZES RIGOROSAS DE FORMATAÇÃO (ESTILO MENTORA):
         </div>
 
         {/* PRIORITY #1 HIGHLIGHT BOX */}
-        <div className="bg-gradient-to-r from-gold/20 via-gold/10 to-transparent border-2 border-gold/40 rounded-2xl p-5 sm:p-6 space-y-2">
+        <div className="bg-gradient-to-r from-gold/20 via-gold/10 to-transparent border-2 border-gold/40 rounded-2xl p-5 sm:p-6 space-y-2 shadow-lg">
           <div className="flex items-center gap-2 text-xs font-black text-gold uppercase tracking-widest">
             <Zap size={16} /> Prioridade Número 1 Recomendada pela Vertus
           </div>
           <p className="text-base sm:text-lg font-black text-white uppercase tracking-tight">
             Estruturar a Conciliação Bancária Diária e o Fluxo de Caixa Projetado
           </p>
-          <p className="text-xs text-white/80 leading-relaxed font-sans">
+          <p className="text-xs sm:text-sm text-white/80 leading-relaxed font-sans">
             Para a realidade da <strong className="text-white">{company}</strong>, a implementação de processos padronizados de conciliação diária e DFC gerencial é a ação que tende a gerar o maior ganho de controle e alívio de caixa imediato.
           </p>
         </div>
       </div>
 
-      {/* 7. MENTORA VERTUS IA — EXECUTIVA E INTERATIVA */}
+      {/* 7. MENTORA VERTUS IA — HUMANIZADA E CONSULTIVA */}
       <div className="bg-gradient-to-br from-vertus-gray via-black to-vertus-black border border-gold/30 rounded-3xl p-6 sm:p-8 space-y-6 shadow-2xl relative overflow-hidden">
         {/* Header Badge & Title */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-white/10 pb-4">
           <div className="space-y-1">
             <div className="inline-flex items-center gap-2 px-3 py-1 bg-gold/10 border border-gold/30 rounded-full text-gold text-[9px] font-black uppercase tracking-widest">
-              <Sparkles size={12} /> INTELIGÊNCIA ARTIFICIAL DE ALTO NÍVEL
+              <Sparkles size={12} /> CONSULTORIA FINANCEIRA EM TEMPO REAL
             </div>
             <h3 className="text-xl sm:text-2xl font-black text-white uppercase tracking-tight">Mentora Vertus IA</h3>
-            <p className="text-xs text-white/60">Análise Inteligente e Consultoria em Tempo Real para <strong className="text-gold">{company}</strong></p>
+            <p className="text-xs text-white/60">Análise Inteligente e Orientação Prática para <strong className="text-gold">{company}</strong></p>
           </div>
         </div>
 
@@ -773,7 +882,7 @@ DIRETRIZES RIGOROSAS DE FORMATAÇÃO (ESTILO MENTORA):
             {[
               `Qual o maior risco do caixa da ${company} hoje?`,
               `Por onde devo começar a organização financeira?`,
-              `Como o BPO Vertus recupera a margem perdida?`
+              `Como recuperar a margem de lucro perdida?`
             ].map((chip, idx) => (
               <button
                 key={idx}
@@ -794,7 +903,7 @@ DIRETRIZES RIGOROSAS DE FORMATAÇÃO (ESTILO MENTORA):
             value={aiQuestion}
             onChange={(e) => setAiQuestion(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && handleAskAi()}
-            placeholder={`Consegue me ajudar a criar um fluxo de caixa inteligente para a ${company}?`}
+            placeholder={`Tire sua dúvida com a Mentora Financeira sobre a ${company}...`}
             className="w-full bg-transparent border-none outline-none text-xs sm:text-sm text-white px-3 placeholder-white/30 font-medium"
           />
           <button
@@ -829,7 +938,7 @@ DIRETRIZES RIGOROSAS DE FORMATAÇÃO (ESTILO MENTORA):
               )}>
                 {msg.role === "model" && (
                   <div className="flex items-center gap-2 text-[10px] font-black text-gold uppercase tracking-widest border-b border-white/10 pb-2.5 mb-2">
-                    <Sparkles size={12} /> PARECER EXECUTIVO DA MENTORA VERTUS IA:
+                    <Sparkles size={12} /> ORIENTAÇÃO CONSULTIVA DA MENTORA VERTUS:
                   </div>
                 )}
                 <div className="prose prose-invert prose-xs sm:prose-sm prose-gold max-w-none text-white/90 leading-relaxed font-sans space-y-2">
@@ -847,7 +956,7 @@ DIRETRIZES RIGOROSAS DE FORMATAÇÃO (ESTILO MENTORA):
               <div className="bg-black/90 border border-gold/20 p-4 rounded-2xl rounded-tl-none">
                 <div className="flex items-center gap-2 text-xs text-gold/90 font-medium">
                   <RefreshCw size={14} className="animate-spin text-gold" />
-                  <span>Mentora Vertus IA elaborando análise estratégica em tempo real para {company}...</span>
+                  <span>Mentora Vertus IA elaborando orientação consultiva para {company}...</span>
                 </div>
               </div>
             </div>
@@ -873,7 +982,7 @@ DIRETRIZES RIGOROSAS DE FORMATAÇÃO (ESTILO MENTORA):
             { title: "Mais Tempo", desc: "Liderança liberada das tarefas operacionais para focar em vendas e estratégia.", icon: Clock },
             { title: "Mais Lucro", desc: "Recuperação das margens invisíveis e eliminação do desperdício recorrente.", icon: DollarSign },
           ].map((item, idx) => (
-            <div key={idx} className="bg-vertus-gray border border-white/10 rounded-2xl p-5 space-y-2 hover:border-gold/40 transition-all flex flex-col justify-between group">
+            <div key={idx} className="bg-vertus-gray border border-white/10 rounded-2xl p-5 space-y-2 hover:border-gold/40 transition-all flex flex-col justify-between group shadow-md">
               <div className="space-y-2">
                 <div className="w-9 h-9 rounded-xl bg-gold/10 border border-gold/20 text-gold flex items-center justify-center group-hover:scale-110 transition-transform">
                   <item.icon size={18} />
@@ -903,7 +1012,7 @@ DIRETRIZES RIGOROSAS DE FORMATAÇÃO (ESTILO MENTORA):
         <div className="flex flex-col items-center gap-3 pt-2">
           <button
             onClick={() => setShowStrategicModal(true)}
-            className="group relative px-8 sm:px-12 py-4 bg-gradient-to-br from-gold-light via-gold to-gold-dark text-vertus-black font-black text-xs sm:text-sm tracking-wider uppercase rounded-2xl hover:scale-[1.02] transition-all flex items-center justify-center gap-3 shadow-2xl shadow-gold/30 overflow-hidden cursor-pointer"
+            className="group relative px-8 sm:px-12 py-4 bg-gradient-to-br from-gold-light via-gold to-gold-dark text-vertus-black font-black text-xs sm:text-sm tracking-wider uppercase rounded-2xl hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-3 shadow-2xl shadow-gold/30 overflow-hidden cursor-pointer"
           >
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent w-full h-full -skew-x-12 animate-shine pointer-events-none" />
             <span className="relative z-10">VER MEU PLANO DE AÇÃO</span>
@@ -940,3 +1049,4 @@ DIRETRIZES RIGOROSAS DE FORMATAÇÃO (ESTILO MENTORA):
     </div>
   );
 }
+
