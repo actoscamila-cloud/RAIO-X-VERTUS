@@ -12,7 +12,7 @@ import AboutVertus from "./components/AboutVertus";
 import AuthScreen from "./components/AuthScreen";
 import BpoVertusDetail from "./components/BpoVertusDetail";
 import { AnimatePresence, motion } from "motion/react";
-import { Sparkles } from "lucide-react";
+import { Sparkles, ArrowRight } from "lucide-react";
 import { Lead, DiagnosisResponse } from "./types";
 import { storage } from "./lib/storage";
 import { auth, db } from "./lib/firebase";
@@ -486,23 +486,30 @@ export default function App() {
                 isTrainingComplete={isTrainingComplete}
                 onOpenAboutVertus={() => setShowAbout(true)}
               />
-              <div className="max-w-5xl mx-auto px-4 sm:px-6 pb-6 space-y-6">
-                <VertusAssistant 
-                  inline 
-                  isLocked={!isTrainingComplete} 
-                  onNavigateToTraining={handleNextToTraining} 
-                />
-                <div className="flex justify-center pt-2">
+              <div className="max-w-5xl mx-auto px-4 sm:px-6 pb-12 pt-2">
+                <div className="bg-gradient-to-r from-vertus-gray via-black to-vertus-gray border border-gold/30 rounded-3xl p-6 sm:p-8 flex flex-col md:flex-row items-center justify-between gap-6 shadow-2xl relative overflow-hidden group">
+                  <div className="absolute -right-10 -bottom-10 w-48 h-48 bg-gold/10 rounded-full blur-3xl pointer-events-none group-hover:bg-gold/20 transition-all" />
+                  
+                  <div className="space-y-2 text-center md:text-left max-w-xl relative z-10">
+                    <div className="inline-flex items-center gap-2 px-3 py-1 bg-gold/10 border border-gold/30 rounded-full text-gold text-[10px] font-black uppercase tracking-widest">
+                      <Sparkles size={12} /> COMO A VERTUS CONSTRÓI ESSE DIAGNÓSTICO
+                    </div>
+                    <h3 className="text-xl sm:text-2xl font-black text-white uppercase tracking-tight">
+                      Antes de sugerir qualquer caminho, nós procuramos entender a <span className="text-gold">realidade da empresa</span>.
+                    </h3>
+                    <p className="text-xs sm:text-sm text-white/70 leading-relaxed font-sans">
+                      Descubra como funciona a metodologia utilizada pela Vertus e por que ela transforma informações financeiras em decisões mais claras e seguras.
+                    </p>
+                  </div>
+
                   <button 
                     onClick={() => setShowAbout(true)}
-                    className="group relative px-8 py-4 sm:px-10 sm:py-4.5 bg-gradient-to-br from-gold-light via-gold to-gold-dark rounded-2xl text-vertus-black flex items-center justify-center gap-3 font-black uppercase tracking-wider text-xs sm:text-sm shadow-xl shadow-gold/20 hover:scale-[1.01] transition-all overflow-hidden border border-white/20"
+                    className="group/btn relative px-8 py-4 sm:px-9 sm:py-4 bg-gradient-to-br from-gold-light via-gold to-gold-dark rounded-2xl text-vertus-black flex items-center justify-center gap-3 font-black uppercase tracking-wider text-xs sm:text-sm shadow-xl shadow-gold/20 hover:scale-[1.03] active:scale-95 transition-all overflow-hidden border border-white/20 shrink-0 cursor-pointer"
                   >
                     <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent w-full h-full -skew-x-12 animate-shine pointer-events-none" />
-                    <Sparkles size={18} className="relative z-10 shrink-0" />
-                    <div className="flex flex-col items-start text-left relative z-10">
-                      <span className="text-xs sm:text-sm font-black leading-tight">Conheça a VERTUS</span>
-                      <span className="text-[9px] font-black tracking-widest opacity-70">Especialista em performance empresarial</span>
-                    </div>
+                    <Sparkles size={18} className="relative z-10 shrink-0 text-vertus-black" />
+                    <span className="text-xs sm:text-sm font-black leading-tight relative z-10">CONHECER A VERTUS</span>
+                    <ArrowRight size={18} className="relative z-10 group-hover/btn:translate-x-1 transition-transform" />
                   </button>
                 </div>
               </div>
