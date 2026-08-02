@@ -204,35 +204,7 @@ export default function Dashboard({ diagnosis, lead, onNext, isTrainingComplete,
 
   const maturity = getMaturityInfo();
 
-  // Initialize Mentora Vertus IA chat message
-  useEffect(() => {
-    if (chatMessages.length === 0) {
-      setChatMessages([
-        {
-          role: "model",
-          text: `Olá **${firstname}**! Analisando especificamente os dados da **${company}** e o resultado do seu diagnóstico, identificamos que você tem uma operação com excelente potencial, mas que hoje sofre com gargalos de previsibilidade de caixa. Como **Mentora Financeira Vertus**, meu papel é te orientar com soluções práticas para estruturar suas finanças — seja você cliente da Vertus ou não.
-
-Um fluxo de caixa eficiente não é apenas um registro de contas; é uma **ferramenta de inteligência e decisão**. Para organizarmos a **${company}** com total clareza, recomendo seguir este roteiro estratégico da **Metodologia Vertus**:
-
-**1. Categorização Inteligente (Plano de Contas)**
-A regra de ouro é a **segregação absoluta**. Organize seu fluxo em três blocos bem definidos:
-- **Entradas Operacionais**: Receitas das vendas e serviços prestados.
-- **Saídas Operacionais**: Custos fixos (aluguel, equipe) e variáveis (matéria-prima, insumos).
-- **Saídas Não Operacionais**: Investimentos, amortização de dívidas e retiradas dos sócios.
-*Dica Prática*: Essa separação expõe na hora as saídas desnecessárias que geram o desperdício estimado de **R$ ${diagnosis.monthlyLoss.toLocaleString("pt-BR")}/mês**.
-
-**2. Conciliação Diária: O Coração do Controle**
-Não espere o fim do mês. Adote a **conciliação diária** para garantir que cada centavo movimentado no banco esteja 100% verificado e sem pendências em até 24 horas.
-
-**3. O DFC Projetado (30/60/90 Dias)**
-Enquanto o caixa passado analisa o histórico, o **DFC Projetado** mapeia o futuro para você antecipar decisões com tranquilidade.
-
-Hoje, a **${company}** já possui algum desses três pilares estruturados na rotina financeira?`
-        }
-      ]);
-    }
-  }, [firstname, company, diagnosis]);
-
+  // Scroll chat on updates
   useEffect(() => {
     if (aiScrollRef.current) {
       aiScrollRef.current.scrollTop = aiScrollRef.current.scrollHeight;
@@ -921,6 +893,22 @@ DIRETRIZES RIGOROSAS DE FORMATAÇÃO:
           ref={aiScrollRef}
           className="bg-black/80 border border-gold/30 rounded-2xl p-4 sm:p-6 max-h-[520px] overflow-y-auto space-y-4 custom-scrollbar scroll-smooth"
         >
+          {chatMessages.length === 0 && !isAiLoading && (
+            <div className="flex flex-col items-center justify-center text-center py-8 px-4 space-y-3">
+              <div className="w-12 h-12 rounded-2xl bg-gold/10 border border-gold/30 flex items-center justify-center text-gold shadow-lg shadow-gold/10">
+                <Sparkles size={24} />
+              </div>
+              <div className="space-y-1 max-w-md">
+                <h4 className="text-sm font-black text-white uppercase tracking-wide">
+                  A Mentora Vertus IA aguarda sua dúvida
+                </h4>
+                <p className="text-xs text-white/60 leading-relaxed font-sans">
+                  Clique em uma das perguntas acima ou digite sua pergunta para receber uma orientação financeira consultiva e personalizada para a <strong className="text-gold">{company}</strong>.
+                </p>
+              </div>
+            </div>
+          )}
+
           {chatMessages.map((msg, idx) => (
             <div key={idx} className={cn("flex gap-3", msg.role === "user" ? "flex-row-reverse" : "flex-row")}>
               <div className={cn(

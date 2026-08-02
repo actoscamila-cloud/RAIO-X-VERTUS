@@ -128,7 +128,7 @@ export default function AboutVertus({
       </header>
 
       {/* Main Container */}
-      <main className="max-w-5xl mx-auto px-4 sm:px-6 py-10 space-y-20">
+      <main className="max-w-5xl mx-auto px-4 sm:px-6 py-6 sm:py-8 space-y-10 sm:space-y-12">
 
         {/* SEÇÃO 1 — HERO: POSICIONAMENTO E IDENTIFICAÇÃO */}
         <section className="relative text-center pt-6 pb-4 space-y-6">
@@ -399,73 +399,86 @@ export default function AboutVertus({
         {/* SEÇÃO 6 — COMO A VERTUS TRANSFORMA A OPERAÇÃO FINANCEIRA */}
         <SectionDivider />
 
-        <section className="space-y-8">
+        <section className="space-y-6">
           <div className="text-center space-y-2 max-w-2xl mx-auto">
             <span className="text-[10px] font-black uppercase tracking-[0.25em] text-gold">Sequência de Transformação</span>
             <h2 className="text-2xl sm:text-3xl font-black text-white uppercase tracking-tight">
               Como transformamos um financeiro desorganizado em uma operação previsível
             </h2>
-            <p className="text-white/50 text-xs sm:text-sm">
+            <p className="text-white/60 text-xs sm:text-sm">
               Uma metodologia executada passo a passo para conduzir sua empresa com segurança:
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3.5">
             {[
               { 
-                step: "Etapa 1", 
+                step: "Etapa 01", 
                 title: "Entendemos a realidade da empresa", 
+                badge: "Mapeamento 360°",
                 desc: "Mapeamos como o dinheiro entra, como sai, quais rotinas existem e onde estão os principais gargalos." 
               },
               { 
-                step: "Etapa 2", 
+                step: "Etapa 02", 
                 title: "Encontramos perdas e riscos", 
+                badge: "Auditoria de Gargalos",
                 desc: "Identificamos desperdícios, falhas de controle, atrasos, informações inconsistentes e pontos que reduzem a margem ou comprometem o caixa." 
               },
               { 
-                step: "Etapa 3", 
+                step: "Etapa 03", 
                 title: "Organizamos a rotina financeira", 
+                badge: "Plano de Contas & Regras",
                 desc: "Definimos processos, responsáveis, categorias, registros, controles e uma rotina clara de acompanhamento." 
               },
               { 
-                step: "Etapa 4", 
+                step: "Etapa 04", 
                 title: "Assumimos e estruturamos a operação", 
                 subtitle: "Operação financeira estruturada — BPO Vertus",
+                badge: "BPO Vertus Ativo",
                 desc: "A equipe Vertus passa a conduzir as rotinas financeiras combinadas, mantendo contas, registros, conciliações e controles atualizados." 
               },
               { 
-                step: "Etapa 5", 
+                step: "Etapa 05", 
                 title: "Transformamos números em informações úteis", 
-                desc: "Organizamos relatórios, projeções e indicadores em uma linguagem que o empresário consegue compreender e utilizar." 
+                badge: "Relatórios & DFC 90d",
+                desc: "Organizamos relatórios, projeções e indicadores em uma linguagem que o empresário consegue compreender e utilizar para tomar decisões." 
               },
               { 
-                step: "Etapa 6", 
+                step: "Etapa 06", 
                 title: "Acompanhamos e evoluímos continuamente", 
+                badge: "Evolução Contínua",
                 desc: "A estrutura não é abandonada após a implantação. A Vertus acompanha a operação, identifica melhorias e ajuda o financeiro a evoluir junto com a empresa." 
               }
             ].map((item, idx) => (
               <motion.div 
                 key={idx} 
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 15 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-40px" }}
-                transition={{ duration: 0.35, delay: idx * 0.06 }}
-                className="bg-vertus-gray border border-white/10 rounded-2xl p-5 space-y-3 relative overflow-hidden group hover:border-gold/40 transition-all flex flex-col justify-between"
+                whileHover={{ y: -5, scale: 1.015 }}
+                transition={{ duration: 0.35, delay: idx * 0.05 }}
+                className="bg-vertus-gray border border-white/10 hover:border-gold/50 rounded-2xl p-4 sm:p-5 space-y-3 relative overflow-hidden group transition-all duration-300 shadow-md hover:shadow-gold/10 flex flex-col justify-between"
               >
                 <div className="space-y-2">
                   <div className="flex justify-between items-center">
-                    <span className="text-[10px] font-black text-gold uppercase tracking-widest bg-gold/10 border border-gold/20 px-2.5 py-1 rounded-lg">
+                    <span className="text-[10px] font-black text-gold uppercase tracking-widest bg-gold/15 border border-gold/30 px-2.5 py-1 rounded-lg shadow-[0_0_10px_rgba(212,175,55,0.15)] group-hover:bg-gold group-hover:text-vertus-black transition-colors">
                       {item.step}
                     </span>
-                    <CheckCircle2 size={16} className="text-white/20 group-hover:text-gold transition-colors" />
+                    <span className="text-[9px] font-bold text-gold/80 uppercase bg-gold/5 px-2 py-0.5 rounded border border-gold/20">
+                      {item.badge}
+                    </span>
                   </div>
-                  <h3 className="text-sm font-bold text-white uppercase tracking-tight pt-1">{item.title}</h3>
+                  <h3 className="text-sm font-bold text-white uppercase tracking-tight pt-1 group-hover:text-gold transition-colors">{item.title}</h3>
                   {item.subtitle && (
-                    <span className="text-[10px] font-bold text-gold block bg-gold/5 px-2 py-0.5 rounded border border-gold/20">
+                    <span className="text-[9px] font-bold text-gold block bg-gold/10 px-2 py-0.5 rounded border border-gold/30">
                       {item.subtitle}
                     </span>
                   )}
                   <p className="text-xs text-white/60 leading-relaxed pt-1">{item.desc}</p>
+                </div>
+                <div className="pt-2 border-t border-white/5 flex justify-between items-center text-[9px] text-white/40 font-mono">
+                  <span>VERTUS EXECUTION</span>
+                  <CheckCircle2 size={13} className="text-white/20 group-hover:text-gold transition-colors" />
                 </div>
               </motion.div>
             ))}
