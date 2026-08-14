@@ -200,28 +200,30 @@ export const storage = {
     return data ? JSON.parse(data) : [];
   },
   saveLead: async (lead: Lead): Promise<string> => {
-    if (auth.currentUser) {
-      try {
-        console.log("storage.saveLead: Saving to Firestore for user", auth.currentUser.uid);
-        const docRef = await addDoc(collection(db, "leads"), {
-          ...lead,
-          userId: auth.currentUser.uid,
-          createdAt: serverTimestamp()
-        });
-        console.log("storage.saveLead: Success, ID:", docRef.id);
-        return docRef.id;
-      } catch (error) {
-        console.error("storage.saveLead: Firestore error:", error);
-        handleFirestoreError(error, "create", "leads");
-      }
+    const userId = auth.currentUser?.uid || `guest_${Date.now()}_${Math.random().toString(36).substring(2, 8)}`;
+    try {
+      console.log("storage.saveLead: Saving to Firestore for user", userId);
+      const docRef = await addDoc(collection(db, "leads"), {
+        ...lead,
+        userId: userId,
+        createdAt: serverTimestamp()
+      });
+      console.log("storage.saveLead: Success, ID:", docRef.id);
+      
+      const leads = JSON.parse(localStorage.getItem(LEADS_KEY) || "[]");
+      const newLead = { ...lead, id: docRef.id, userId };
+      leads.push(newLead);
+      localStorage.setItem(LEADS_KEY, JSON.stringify(leads));
+      return docRef.id;
+    } catch (error) {
+      console.error("storage.saveLead: Firestore error, saving locally:", error);
+      const leads = JSON.parse(localStorage.getItem(LEADS_KEY) || "[]");
+      const id = Math.random().toString(36).substr(2, 9);
+      const newLead = { ...lead, id, userId };
+      leads.push(newLead);
+      localStorage.setItem(LEADS_KEY, JSON.stringify(leads));
+      return id;
     }
-    console.log("storage.saveLead: No user logged in, saving to localStorage");
-    const leads = JSON.parse(localStorage.getItem(LEADS_KEY) || "[]");
-    const id = Math.random().toString(36).substr(2, 9);
-    const newLead = { ...lead, id };
-    leads.push(newLead);
-    localStorage.setItem(LEADS_KEY, JSON.stringify(leads));
-    return id;
   },
   getDiagnoses: async (): Promise<DiagnosisResponse[]> => {
     if (auth.currentUser) {
@@ -249,28 +251,30 @@ export const storage = {
     return data ? JSON.parse(data) : [];
   },
   saveDiagnosis: async (diagnosis: DiagnosisResponse): Promise<string> => {
-    if (auth.currentUser) {
-      try {
-        console.log("storage.saveDiagnosis: Saving to Firestore for user", auth.currentUser.uid);
-        const docRef = await addDoc(collection(db, "diagnoses"), {
-          ...diagnosis,
-          userId: auth.currentUser.uid,
-          createdAt: serverTimestamp()
-        });
-        console.log("storage.saveDiagnosis: Success, ID:", docRef.id);
-        return docRef.id;
-      } catch (error) {
-        console.error("storage.saveDiagnosis: Firestore error:", error);
-        handleFirestoreError(error, "create", "diagnoses");
-      }
+    const userId = auth.currentUser?.uid || diagnosis.userId || `guest_${Date.now()}_${Math.random().toString(36).substring(2, 8)}`;
+    try {
+      console.log("storage.saveDiagnosis: Saving to Firestore for user", userId);
+      const docRef = await addDoc(collection(db, "diagnoses"), {
+        ...diagnosis,
+        userId: userId,
+        createdAt: serverTimestamp()
+      });
+      console.log("storage.saveDiagnosis: Success, ID:", docRef.id);
+      
+      const diagnoses = JSON.parse(localStorage.getItem(DIAGNOSES_KEY) || "[]");
+      const newDiagnosis = { ...diagnosis, id: docRef.id, userId };
+      diagnoses.push(newDiagnosis);
+      localStorage.setItem(DIAGNOSES_KEY, JSON.stringify(diagnoses));
+      return docRef.id;
+    } catch (error) {
+      console.error("storage.saveDiagnosis: Firestore error, saving locally:", error);
+      const diagnoses = JSON.parse(localStorage.getItem(DIAGNOSES_KEY) || "[]");
+      const id = Math.random().toString(36).substr(2, 9);
+      const newDiagnosis = { ...diagnosis, id, userId };
+      diagnoses.push(newDiagnosis);
+      localStorage.setItem(DIAGNOSES_KEY, JSON.stringify(diagnoses));
+      return id;
     }
-    console.log("storage.saveDiagnosis: No user logged in, saving to localStorage");
-    const diagnoses = JSON.parse(localStorage.getItem(DIAGNOSES_KEY) || "[]");
-    const id = Math.random().toString(36).substr(2, 9);
-    const newDiagnosis = { ...diagnosis, id };
-    diagnoses.push(newDiagnosis);
-    localStorage.setItem(DIAGNOSES_KEY, JSON.stringify(diagnoses));
-    return id;
   },
   getSettings: async (): Promise<AdminSettings> => {
     try {

@@ -244,11 +244,17 @@ export default function App() {
   }, [lead, diagnosis, state, user]);
 
   const handleStart = () => {
-    if (user) {
-      setState("lead-form");
-      setProgress(0);
+    setState("diagnosis");
+    setProgress(5);
+  };
+
+  const handleContinue = () => {
+    if (lead && diagnosis) {
+      setState("dashboard");
+      setProgress(100);
     } else {
-      setState("login");
+      setState("diagnosis");
+      setProgress(10);
     }
   };
 
@@ -257,6 +263,12 @@ export default function App() {
     try {
       await storage.saveUser(userData);
       setUser(userData);
+      
+      const isUserAdmin = ADMIN_EMAILS.includes(userData.email);
+      if (isUserAdmin) {
+        setState("admin");
+        return;
+      }
       
       // Check for user-specific session
       console.log("App.handleAuthComplete: Checking for existing session...");
@@ -272,9 +284,9 @@ export default function App() {
         if (userSession.state === "training") setProgress(100);
         if (userSession.state === "action-plan") setProgress(100);
       } else {
-        console.log("App.handleAuthComplete: No valid session found, redirecting to lead-form");
-        setState("lead-form");
-        setProgress(0);
+        console.log("App.handleAuthComplete: No valid session found, directing to diagnosis");
+        setState("diagnosis");
+        setProgress(5);
       }
     } catch (error) {
       console.error("App.handleAuthComplete: Error during post-auth setup:", error);
@@ -289,6 +301,45 @@ export default function App() {
     setLead(leadWithId);
     setState("diagnosis");
     setProgress(5);
+  };
+
+  const handleDiagnosisAndLeadComplete = async (newDiagnosis: DiagnosisResponse, leadData: Partial<Lead>) => {
+    console.log("Submitting lead & diagnosis:", { leadData, newDiagnosis });
+    
+    // 1. Create full lead object
+    const fullLead: Lead = {
+      companyName: leadData.companyName || "Sua Empresa",
+      responsibleName: leadData.responsibleName || user?.name || "Empresário",
+      whatsapp: leadData.whatsapp || "",
+      email: leadData.email || user?.email || "",
+      location: leadData.location || "Brasil",
+      monthlyRevenue: leadData.monthlyRevenue || "R$ 50k - 100k",
+      employeeCount: leadData.employeeCount || "1 - 5",
+      segment: leadData.segment || "Serviços",
+      createdAt: new Date().toISOString()
+    };
+    
+    // 2. Save lead
+    const leadId = await storage.saveLead(fullLead);
+    const leadWithId = { ...fullLead, id: leadId };
+    setLead(leadWithId);
+
+    // 3. Save diagnosis linked to leadId
+    const fullDiagnosis: DiagnosisResponse = {
+      ...newDiagnosis,
+      leadId: leadId
+    };
+    const diagId = await storage.saveDiagnosis(fullDiagnosis);
+    const diagWithId = { ...fullDiagnosis, id: diagId };
+    setDiagnosis(diagWithId);
+
+    // 4. Save session & set access
+    storage.setLastAccess();
+    storage.saveSession(leadWithId, diagWithId, "dashboard", user?.email);
+
+    // 5. Navigate to Dashboard
+    setState("dashboard");
+    setProgress(100);
   };
 
   const handleDiagnosisComplete = async (newDiagnosis: DiagnosisResponse) => {
@@ -308,16 +359,13 @@ export default function App() {
 
   const handleBack = () => {
     if (state === "login") setState("landing");
-    else if (state === "lead-form") {
-      setState("landing");
-      storage.clearSession(user?.email);
-    }
-    else if (state === "diagnosis") setState("lead-form");
-    else if (state === "dashboard") setState("diagnosis");
+    else if (state === "lead-form") setState("landing");
+    else if (state === "diagnosis") setState("landing");
+    else if (state === "dashboard") setState("landing");
     else if (state === "training") setState("dashboard");
     else if (state === "action-plan") setState("dashboard");
     else if (state === "bpo-vertus") {
-      if (user && lead) {
+      if (diagnosis && lead) {
         setState("dashboard");
       } else {
         setState("landing");
@@ -401,6 +449,7 @@ export default function App() {
         hideFooter={state === "admin" || showAbout}
         isAdmin={isAdmin}
         onAdminClick={() => setState("admin")}
+        onAdminLoginClick={() => setState("login")}
         onBpoClick={() => { setShowAbout(false); setState("bpo-vertus"); }}
         onVertusFinanceClick={() => setShowAbout(true)}
       >
@@ -455,7 +504,7 @@ export default function App() {
               <LeadForm onSubmit={handleLeadSubmit} userEmail={user?.email} />
             </motion.div>
           )}
-          {state === "diagnosis" && lead && (
+          {state === "diagnosis" && (
             <motion.div
               key="diagnosis"
               initial={{ opacity: 0 }}
@@ -464,9 +513,13 @@ export default function App() {
               transition={{ duration: 0.3 }}
             >
               <DiagnosisFlow 
-                leadId={lead.id!} 
-                onComplete={handleDiagnosisComplete} 
+                leadId={lead?.id}
+                initialLead={lead}
+                userEmail={user?.email}
+                userName={user?.name}
+                onComplete={handleDiagnosisAndLeadComplete} 
                 onProgress={setProgress}
+                onBackToLanding={() => setState("landing")}
               />
             </motion.div>
           )}

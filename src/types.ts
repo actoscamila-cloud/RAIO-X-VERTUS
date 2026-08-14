@@ -17,6 +17,7 @@ export interface Lead {
 
 export interface DiagnosisResponse {
   id?: string;
+  userId?: string;
   leadId: string;
   score: number;
   classification: "Crítica" | "Atenção" | "Saudável";

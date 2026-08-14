@@ -11,6 +11,7 @@ interface LayoutProps {
   hideFooter?: boolean;
   isAdmin?: boolean;
   onAdminClick?: () => void;
+  onAdminLoginClick?: () => void;
   onBpoClick?: () => void;
   onVertusFinanceClick?: () => void;
 }
@@ -24,9 +25,35 @@ export default function Layout({
   hideFooter, 
   isAdmin, 
   onAdminClick,
+  onAdminLoginClick,
   onBpoClick,
   onVertusFinanceClick
 }: LayoutProps) {
+  const [clickCount, setClickCount] = React.useState(0);
+  const clickTimeoutRef = React.useRef<NodeJS.Timeout | null>(null);
+
+  const handleLogoSecretClick = () => {
+    if (!onAdminLoginClick && !onAdminClick) return;
+
+    if (clickTimeoutRef.current) {
+      clearTimeout(clickTimeoutRef.current);
+    }
+
+    const nextCount = clickCount + 1;
+    if (nextCount >= 3) {
+      setClickCount(0);
+      if (isAdmin && onAdminClick) {
+        onAdminClick();
+      } else if (onAdminLoginClick) {
+        onAdminLoginClick();
+      }
+    } else {
+      setClickCount(nextCount);
+      clickTimeoutRef.current = setTimeout(() => {
+        setClickCount(0);
+      }, 1000);
+    }
+  };
   return (
     <div className="min-h-screen bg-vertus-black text-white font-sans selection:bg-gold selection:text-vertus-black overflow-x-hidden">
       {/* Background elements */}
@@ -61,7 +88,11 @@ export default function Layout({
                 <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
               </button>
             )}
-            <div className="flex items-center gap-2.5 sm:gap-4 shrink-0">
+            <div 
+              onClick={handleLogoSecretClick}
+              className="flex items-center gap-2.5 sm:gap-4 shrink-0 select-none cursor-default"
+              title=""
+            >
               <span className="text-xl sm:text-3xl font-black italic text-gold tracking-tighter leading-none shrink-0">VERTUS</span>
               <div className="flex flex-col justify-center shrink-0">
                 <div className="text-xs sm:text-lg font-black tracking-tighter uppercase leading-tight text-white whitespace-nowrap">
@@ -146,7 +177,7 @@ export default function Layout({
                   © 2026 Vertus Performance. Todos os direitos reservados.
                 </p>
               </div>
-              <div className="flex justify-center md:justify-end gap-6 text-[10px] font-black uppercase tracking-widest text-white/40">
+              <div className="flex flex-wrap items-center justify-center md:justify-end gap-6 text-[10px] font-black uppercase tracking-widest text-white/40">
                 <a href="#" className="hover:text-white transition-colors">Privacidade</a>
                 <span className="text-white/10">•</span>
                 <a href="#" className="hover:text-white transition-colors">Termos</a>

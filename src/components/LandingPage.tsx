@@ -24,7 +24,11 @@ export default function LandingPage({ onStart, onContinue }: LandingPageProps) {
           </div>
           
           <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-[2.75rem] font-black tracking-tight leading-[1.18] text-white uppercase break-words">
-            Descubra os <span className="text-transparent bg-clip-text bg-gradient-to-br from-gold via-gold-light to-gold-dark">gargalos invisíveis</span> que estão travando o lucro da sua empresa
+            Descubra os gargalos invisíveis e{" "}
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold-light via-gold to-gold-dark">
+              aumente o lucro
+            </span>{" "}
+            da sua empresa
           </h1>
           
           <p className="text-xs sm:text-sm md:text-base text-white/70 leading-relaxed max-w-xl font-medium">

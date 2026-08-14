@@ -2,12 +2,11 @@ import React, { useState, useEffect } from "react";
 import { storage } from "../lib/storage";
 import { Lead, DiagnosisResponse } from "../types";
 import { ADMIN_EMAILS } from "../constants";
-import { Users, FileText, Trash2, Download, Search, Filter, ArrowRight, ShieldCheck, BarChart3, AlertCircle, MessageSquare, X, ExternalLink, TrendingDown, Lock, LogOut, Mail, MapPin, DollarSign, Briefcase, Target, LayoutGrid, Sparkles, Share2 } from "lucide-react";
+import { Users, FileText, Trash2, Download, Search, Filter, ArrowRight, ShieldCheck, BarChart3, AlertCircle, MessageSquare, X, ExternalLink, TrendingDown, Lock, LogOut, Mail, MapPin, DollarSign, Briefcase, Target, LayoutGrid, Sparkles } from "lucide-react";
 import { GoogleGenAI } from "@google/genai";
 import ReactMarkdown from "react-markdown";
 import { cn } from "../lib/utils";
 import { motion, AnimatePresence } from "motion/react";
-import MarketingKit from "./MarketingKit";
 
 interface AdminPanelProps {
   onLogout: () => void;
@@ -29,7 +28,7 @@ export default function AdminPanel({ onLogout }: AdminPanelProps) {
   const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
   const [aiScript, setAiScript] = useState<string>("");
   const [isGeneratingScript, setIsGeneratingScript] = useState(false);
-  const [view, setView] = useState<"leads" | "intelligence" | "users" | "marketing">("leads");
+  const [view, setView] = useState<"leads" | "intelligence" | "users">("leads");
   const [cloudUsers, setCloudUsers] = useState<any[]>([]);
   const [settings, setSettings] = useState({
     aiPrompt: "",
@@ -440,15 +439,6 @@ export default function AdminPanel({ onLogout }: AdminPanelProps) {
             >
               Inteligência VERTUS
             </button>
-            <button 
-              onClick={() => setView("marketing")}
-              className={cn(
-                "px-6 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all flex items-center gap-1.5",
-                view === "marketing" ? "bg-gold text-vertus-black" : "text-white/40 hover:text-white"
-              )}
-            >
-              <Share2 size={12} /> Kit de Divulgação
-            </button>
           </div>
 
           <button 
@@ -731,8 +721,6 @@ export default function AdminPanel({ onLogout }: AdminPanelProps) {
             </div>
           </div>
         </div>
-      ) : view === "marketing" ? (
-        <MarketingKit />
       ) : (
         <div className="space-y-12">
           {/* Stats Grid */}
